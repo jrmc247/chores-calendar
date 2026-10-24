@@ -37,7 +37,7 @@
         <button type="button" (click)="step(1)" aria-label="Next">›</button>
       </div>
 
-      <h2>{{ date() | date: headingFormat() }}</h2>
+      <h2>{{ heading() }}</h2>
 
       <div class="view-switch" role="group" aria-label="View">
         @for (option of views; track option) {
@@ -51,6 +51,9 @@
     @switch (view()) {
       @case ('day') {
         <app-day-view [day]="date()" />
+      }
+      @case ('week') {
+        <app-week-view [week]="date()" (daySelected)="open('day', $event)" />
       }
       @case ('month') {
         <app-month-view [month]="date()" (daySelected)="open('day', $event)" />

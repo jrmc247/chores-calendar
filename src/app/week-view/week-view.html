@@ -1,0 +1,26 @@
+@if (anytimeChores().length) {
+  <app-anytime-strip label="Anytime this week" [start]="weekStart()" [items]="anytimeChores()" />
+}
+
+<div class="days">
+  @for (day of days(); track day.date.getTime()) {
+    <section class="day" [class.today]="day.isToday">
+      <button type="button" class="heading" (click)="daySelected.emit(day.date)">
+        {{ day.date | date: 'EEE d' }}
+      </button>
+      @for (chore of day.chores; track chore) {
+        <button
+          type="button"
+          [class]="'chore ' + chore.color"
+          [class.done]="store.isDone(chore, day.date)"
+          [attr.aria-pressed]="store.isDone(chore, day.date)"
+          (click)="store.tickOff(chore, day.date)"
+        >
+          {{ chore.name }}
+        </button>
+      } @empty {
+        <span class="empty">Nothing due</span>
+      }
+    </section>
+  }
+</div>
