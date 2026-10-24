@@ -1,0 +1,24 @@
+<div class="months">
+  @for (entry of months(); track entry.month.getMonth()) {
+    <button type="button" class="month" (click)="monthSelected.emit(entry.month)">
+      <h3>{{ entry.month | date: 'MMMM' }}</h3>
+      <div class="grid">
+        @for (weekday of weekdays; track weekday) {
+          <span class="weekday">{{ weekday.charAt(0) }}</span>
+        }
+        @for (day of entry.days; track day.date.getTime()) {
+          <span class="day" [class.today]="day.isToday">
+            @if (day.isInMonth) {
+              <span class="number">{{ day.date.getDate() }}</span>
+              <span class="dots">
+                @for (color of day.colors; track $index) {
+                  <span [class]="'dot ' + color"></span>
+                }
+              </span>
+            }
+          </span>
+        }
+      </div>
+    </button>
+  }
+</div>

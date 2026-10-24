@@ -1,0 +1,56 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.weekday {
+  padding: 0.25rem;
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.day {
+  min-height: 6.5rem;
+  padding: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.day.outside {
+  opacity: 0.45;
+}
+
+.day.today {
+  outline: 2px solid var(--accent);
+}
+
+.number {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.chore {
+  padding: 2px 6px;
+  border: none;
+  border-radius: 4px;
+  text-align: left;
+  font: inherit;
+  font-size: 0.8rem;
+  color: white;
+  background: var(--person-color);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chore.done {
+  text-decoration: line-through;
+  opacity: 0.4;
+}

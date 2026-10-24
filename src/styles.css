@@ -1,0 +1,56 @@
+/* Colors used across the app. Change a person's color here. */
+:root {
+  --blue: #2563eb;
+  --blue-tint: #dbeafe;
+  --red: #dc2626;
+  --red-tint: #fee2e2;
+
+  --background: #f4f4f5;
+  --surface: #ffffff;
+  --text: #18181b;
+  --muted: #71717a;
+  --accent: #18181b;
+
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --blue: #3b82f6;
+    --blue-tint: #172554;
+    --red: #ef4444;
+    --red-tint: #450a0a;
+
+    --background: #09090b;
+    --surface: #18181b;
+    --text: #f4f4f5;
+    --muted: #a1a1aa;
+    --accent: #f4f4f5;
+  }
+}
+
+/* Anything marked .blue or .red picks up that person's color. */
+.blue {
+  --person-color: var(--blue);
+  --person-tint: var(--blue-tint);
+}
+
+.red {
+  --person-color: var(--red);
+  --person-tint: var(--red-tint);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  color: var(--text);
+  background: var(--background);
+}
+
+button {
+  font: inherit;
+}

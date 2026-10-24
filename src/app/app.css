@@ -1,0 +1,86 @@
+:host {
+  display: block;
+  padding: 1rem 1.5rem;
+}
+
+.top-bar,
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.people,
+.navigation,
+.view-switch {
+  display: flex;
+  gap: 0.5rem;
+}
+
+button {
+  padding: 0.4rem 0.9rem;
+  border: 1px solid var(--muted);
+  border-radius: 6px;
+  color: var(--text);
+  background: var(--surface);
+  cursor: pointer;
+}
+
+button[aria-pressed='true'] {
+  color: var(--background);
+  background: var(--text);
+}
+
+.person {
+  border: 2px solid var(--person-color);
+  color: var(--person-color);
+  font-weight: 600;
+}
+
+.person[aria-pressed='true'] {
+  color: white;
+  background: var(--person-color);
+}
+
+.problems {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  color: var(--red);
+  background: var(--red-tint);
+}
+
+.problems ul {
+  margin: 0.25rem 0 0;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 18rem minmax(0, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (max-width: 800px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}

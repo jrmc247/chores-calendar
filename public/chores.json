@@ -1,0 +1,58 @@
+{
+  "people": {
+    "blue": "Jérôme",
+    "red": "Partner"
+  },
+  "chores": [
+    {
+      "name": "Take out the trash",
+      "color": "blue",
+      "repeat": { "type": "weekly", "days": ["mon"] }
+    },
+    {
+      "name": "Wash the dishes",
+      "color": "red",
+      "repeat": { "type": "weekly", "days": ["mon", "tue", "wed"] }
+    },
+    {
+      "name": "Wash the dishes",
+      "color": "blue",
+      "repeat": { "type": "weekly", "days": ["thu", "fri", "sat", "sun"] }
+    },
+    {
+      "name": "Paper recycling",
+      "color": "red",
+      "repeat": { "type": "weekly", "days": ["mon"], "every": 2, "start": "2026-10-05" }
+    },
+    {
+      "name": "Water the plants",
+      "color": "blue",
+      "repeat": { "type": "daily", "every": 3, "start": "2026-10-01" }
+    },
+    {
+      "name": "Pay the rent",
+      "color": "red",
+      "repeat": { "type": "monthly", "days": ["last"] }
+    },
+    {
+      "name": "Clean the fridge",
+      "color": "blue",
+      "repeat": { "type": "monthly", "weekday": "sat", "nth": 1 }
+    },
+    {
+      "name": "Descale the coffee machine",
+      "color": "red",
+      "repeat": { "type": "monthly", "days": [15], "every": 3, "start": "2026-10-01" }
+    },
+    {
+      "name": "Change the smoke detector battery",
+      "color": "blue",
+      "repeat": { "type": "yearly", "dates": ["03-01"] }
+    },
+    {
+      "name": "Plumber visit",
+      "color": "red",
+      "repeat": { "type": "once", "dates": ["2026-11-14"] }
+    }
+  ]
+}

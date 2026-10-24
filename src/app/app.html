@@ -1,0 +1,58 @@
+<header class="top-bar">
+  <h1>Household chores</h1>
+
+  <nav class="people" aria-label="Show chores of">
+    @for (color of colors; track color) {
+      <button
+        type="button"
+        [class]="'person ' + color"
+        [attr.aria-pressed]="store.colorFilter() === color"
+        (click)="toggleFilter(color)"
+      >
+        {{ store.people()[color] }}
+      </button>
+    }
+  </nav>
+</header>
+
+@if (store.problems().length) {
+  <section class="problems" role="alert">
+    <strong>Please check chores.json</strong>
+    <ul>
+      @for (problem of store.problems(); track problem) {
+        <li>{{ problem }}</li>
+      }
+    </ul>
+  </section>
+}
+
+<div class="layout">
+  <app-chore-list />
+
+  <main>
+    <div class="toolbar">
+      <div class="navigation">
+        <button type="button" (click)="step(-1)" aria-label="Previous">‹</button>
+        <button type="button" (click)="goToToday()">Today</button>
+        <button type="button" (click)="step(1)" aria-label="Next">›</button>
+      </div>
+
+      <h2>{{ month() | date: (view() === 'month' ? 'MMMM y' : 'y') }}</h2>
+
+      <div class="view-switch" role="group" aria-label="View">
+        <button type="button" [attr.aria-pressed]="view() === 'month'" (click)="view.set('month')">
+          Month
+        </button>
+        <button type="button" [attr.aria-pressed]="view() === 'year'" (click)="view.set('year')">
+          Year
+        </button>
+      </div>
+    </div>
+
+    @if (view() === 'month') {
+      <app-month-view [month]="month()" />
+    } @else {
+      <app-year-view [year]="month().getFullYear()" (monthSelected)="openMonth($event)" />
+    }
+  </main>
+</div>
