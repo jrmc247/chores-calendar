@@ -44,6 +44,12 @@ describe('validateChore', () => {
     expect(validateChore(chore({ repeat: { type: 'weekly', times: 0 } }), 0)).toHaveLength(1);
   });
 
+  it('accepts an emoji icon and rejects text', () => {
+    expect(validateChore(chore({ icon: '🧺' }), 0)).toEqual([]);
+    expect(validateChore(chore({ icon: '🗑️' }), 0)).toEqual([]);
+    expect(validateChore(chore({ icon: 'laundry basket' }), 0)).toHaveLength(1);
+  });
+
   it('rejects an unknown repeat type', () => {
     expect(validateChore(chore({ repeat: { type: 'hourly' } }), 0)).toHaveLength(1);
   });

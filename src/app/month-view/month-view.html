@@ -1,13 +1,13 @@
-@if (monthChores().length) {
-  <app-anytime-strip
-    class="month-strip"
-    label="Anytime this month"
-    [start]="monthStart()"
-    [items]="monthChores()"
-  />
-}
-
 <div class="grid">
+  @if (monthChores().length) {
+    <app-anytime-strip
+      class="strip"
+      label="Anytime this month"
+      [start]="monthStart()"
+      [items]="monthChores()"
+    />
+  }
+
   @for (weekday of weekdays; track weekday) {
     <div class="weekday">{{ weekday }}</div>
   }
@@ -15,8 +15,8 @@
   @for (week of weeks(); track week.start.getTime()) {
     @if (week.anytimeChores.length) {
       <app-anytime-strip
-        class="week-strip"
-        label="Anytime"
+        class="strip"
+        label="Anytime this week"
         [start]="week.start"
         [items]="week.anytimeChores"
       />
@@ -28,17 +28,23 @@
           {{ day.date.getDate() }}
         </button>
         @if (day.isInMonth) {
-          @for (chore of day.chores; track chore) {
-            <button
-              type="button"
-              [class]="'chore ' + chore.color"
-              [class.done]="store.isDone(chore, day.date)"
-              [attr.aria-pressed]="store.isDone(chore, day.date)"
-              (click)="store.tickOff(chore, day.date)"
-            >
-              {{ chore.name }}
-            </button>
-          }
+          <div class="chores">
+            @for (chore of day.chores; track chore) {
+              <!-- With an icon only the icon shows; the name is in the tooltip and the chore list. -->
+              <button
+                type="button"
+                [class]="'chore ' + chore.color"
+                [class.icon-only]="chore.icon"
+                [class.done]="store.isDone(chore, day.date)"
+                [attr.aria-pressed]="store.isDone(chore, day.date)"
+                [attr.aria-label]="chore.name"
+                [title]="chore.name"
+                (click)="store.tickOff(chore, day.date)"
+              >
+                {{ chore.icon ?? chore.name }}
+              </button>
+            }
+          </div>
         }
       </div>
     }

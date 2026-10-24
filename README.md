@@ -11,6 +11,7 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
   "chores": [
     {
       "name": "Take out the trash",
+      "icon": "🗑️",
       "color": "blue",
       "repeat": { "type": "weekly", "days": ["mon"] }
     }
@@ -19,6 +20,7 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
 ```
 
 - Each chore has a `name`, a `color` (`"blue"` or `"red"`) and a `repeat` rule.
+- An `icon` (one emoji, e.g. `"icon": "🧺"`) is optional. The month view then shows just the icon, with the name on hover; everywhere else the icon sits next to the name. If emoji show as empty boxes on the Pi, install an emoji font: `sudo apt install fonts-noto-color-emoji`.
 - If something in the file is wrong, the page shows a red box saying which chore and what to fix. The other chores keep working.
 
 ### Repeat rules

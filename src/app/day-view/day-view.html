@@ -8,6 +8,9 @@
         [attr.aria-pressed]="store.isDone(chore, day())"
         (click)="store.tickOff(chore, day())"
       >
+        @if (chore.icon) {
+          <span class="icon">{{ chore.icon }}</span>
+        }
         {{ chore.name }}
       </button>
     </li>

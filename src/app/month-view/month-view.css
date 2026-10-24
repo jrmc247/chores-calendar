@@ -52,15 +52,24 @@
   background: var(--background);
 }
 
-.month-strip {
-  margin-bottom: 0.75rem;
-}
-
-/* Inside the grid the weekly strips stay quiet: no box, just the chores. */
-.week-strip {
+/* Anytime chores of the month (top) and of each week: a quiet row, no box. */
+.strip {
   grid-column: 1 / -1;
   margin-top: 8px;
   padding: 0 0.1rem;
   border: none;
   background: transparent;
+}
+
+.chores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.chore.icon-only {
+  width: auto;
+  padding: 1px 5px;
+  font-size: 1rem;
+  line-height: 1.4;
 }
