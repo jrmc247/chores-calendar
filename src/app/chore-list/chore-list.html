@@ -5,12 +5,7 @@
       <ul>
         @for (chore of group.chores; track chore.name) {
           <li>
-            <span class="name">
-              @if (chore.icon) {
-                <span class="icon">{{ chore.icon }}</span>
-              }
-              {{ chore.name }}</span
-            >
+            <span class="name">{{ chore.name }}</span>
             <span class="schedule">{{ chore.schedule }}</span>
             @if (chore.nextDue; as nextDue) {
               <span class="next">Next: {{ nextDue | date: 'EEE d MMM' }}</span>

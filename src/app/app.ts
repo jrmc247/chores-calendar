@@ -1,5 +1,5 @@
 import { TitleCasePipe, formatDate } from '@angular/common';
-import { Component, LOCALE_ID, computed, inject, signal } from '@angular/core';
+import { Component, LOCALE_ID, computed, effect, inject, signal } from '@angular/core';
 import { ChoreList } from './chore-list/chore-list';
 import { ChoreStore, ColorFilter } from './chores/chore-store';
 import { CHORE_COLORS } from './chores/chore.model';
@@ -7,13 +7,22 @@ import { DayView } from './day-view/day-view';
 import { MonthView } from './month-view/month-view';
 import { Clock } from './shared/clock';
 import { addDays, addMonths, startOfWeek } from './shared/dates';
+import { storedSignal } from './shared/stored-signal';
 import { WeekView } from './week-view/week-view';
 import { YearView } from './year-view/year-view';
 
 type CalendarView = 'day' | 'week' | 'month' | 'year';
 
+/** What the page shows: the chore list, the calendar, or both side by side. */
+const LAYOUTS = ['list', 'both', 'calendar'] as const;
+type Layout = (typeof LAYOUTS)[number];
+
+const THEMES = ['light', 'dark'] as const;
+type Theme = (typeof THEMES)[number];
+
 /** Phones open on the day view; a month grid is too crowded there. */
 const isSmallScreen = () => window.matchMedia('(max-width: 600px)').matches;
+const prefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 @Component({
   selector: 'app-root',
@@ -28,6 +37,23 @@ export class App {
 
   protected readonly colors = CHORE_COLORS;
   protected readonly views: CalendarView[] = ['day', 'week', 'month', 'year'];
+  protected readonly layouts = LAYOUTS;
+  /** Remembered per device, so the phone and the wall screen can differ. */
+  protected readonly layout = storedSignal<Layout>(
+    'chores.layout',
+    isSmallScreen() ? 'calendar' : 'both',
+    LAYOUTS,
+  );
+  /** Starts from the device setting; the switch overrides it on this device. */
+  protected readonly theme = storedSignal<Theme>(
+    'chores.theme',
+    prefersDark() ? 'dark' : 'light',
+    THEMES,
+  );
+
+  constructor() {
+    effect(() => (document.documentElement.dataset['theme'] = this.theme()));
+  }
   protected readonly view = signal<CalendarView>(isSmallScreen() ? 'day' : 'month');
   /** The day on screen; the month and year views show the month and year around it. */
   protected readonly date = signal(this.clock.today());
@@ -71,6 +97,10 @@ export class App {
   protected open(view: CalendarView, date: Date): void {
     this.date.set(date);
     this.view.set(view);
+  }
+
+  protected toggleTheme(): void {
+    this.theme.update((theme) => (theme === 'light' ? 'dark' : 'light'));
   }
 
   protected toggleFilter(color: ColorFilter): void {

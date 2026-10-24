@@ -1,18 +1,36 @@
 <header class="top-bar">
   <h1>Household chores</h1>
 
-  <nav class="colors" aria-label="Show only">
-    @for (color of colors; track color) {
-      <button
-        type="button"
-        [class]="'color ' + color"
-        [attr.aria-pressed]="store.colorFilter() === color"
-        (click)="toggleFilter(color)"
-      >
-        {{ color | titlecase }}
+  <div class="layout-switch" role="group" aria-label="Show">
+    @for (option of layouts; track option) {
+      <button type="button" [attr.aria-pressed]="layout() === option" (click)="layout.set(option)">
+        {{ option | titlecase }}
       </button>
     }
-  </nav>
+  </div>
+
+  <div class="actions">
+    <nav class="colors" aria-label="Show only">
+      @for (color of colors; track color) {
+        <button
+          type="button"
+          [class]="'color ' + color"
+          [attr.aria-pressed]="store.colorFilter() === color"
+          (click)="toggleFilter(color)"
+        >
+          {{ color | titlecase }}
+        </button>
+      }
+    </nav>
+    <button
+      type="button"
+      class="theme"
+      [attr.aria-label]="theme() === 'light' ? 'Switch to dark' : 'Switch to light'"
+      (click)="toggleTheme()"
+    >
+      {{ theme() === 'light' ? '☾' : '☀' }}
+    </button>
+  </div>
 </header>
 
 @if (store.problems().length) {
@@ -26,41 +44,49 @@
   </section>
 }
 
-<div class="layout">
-  <app-chore-list />
+<div class="layout" [class.single]="layout() !== 'both'">
+  @if (layout() !== 'calendar') {
+    <app-chore-list />
+  }
 
-  <main>
-    <div class="toolbar">
-      <div class="navigation">
-        <button type="button" (click)="step(-1)" aria-label="Previous">‹</button>
-        <button type="button" (click)="goToToday()">Today</button>
-        <button type="button" (click)="step(1)" aria-label="Next">›</button>
+  @if (layout() !== 'list') {
+    <main>
+      <div class="toolbar">
+        <div class="navigation">
+          <button type="button" (click)="step(-1)" aria-label="Previous">‹</button>
+          <button type="button" (click)="goToToday()">Today</button>
+          <button type="button" (click)="step(1)" aria-label="Next">›</button>
+        </div>
+
+        <h2>{{ heading() }}</h2>
+
+        <div class="view-switch" role="group" aria-label="View">
+          @for (option of views; track option) {
+            <button
+              type="button"
+              [attr.aria-pressed]="view() === option"
+              (click)="view.set(option)"
+            >
+              {{ option | titlecase }}
+            </button>
+          }
+        </div>
       </div>
 
-      <h2>{{ heading() }}</h2>
-
-      <div class="view-switch" role="group" aria-label="View">
-        @for (option of views; track option) {
-          <button type="button" [attr.aria-pressed]="view() === option" (click)="view.set(option)">
-            {{ option | titlecase }}
-          </button>
+      @switch (view()) {
+        @case ('day') {
+          <app-day-view [day]="date()" />
         }
-      </div>
-    </div>
-
-    @switch (view()) {
-      @case ('day') {
-        <app-day-view [day]="date()" />
+        @case ('week') {
+          <app-week-view [week]="date()" (daySelected)="open('day', $event)" />
+        }
+        @case ('month') {
+          <app-month-view [month]="date()" (daySelected)="open('day', $event)" />
+        }
+        @case ('year') {
+          <app-year-view [year]="date().getFullYear()" (monthSelected)="open('month', $event)" />
+        }
       }
-      @case ('week') {
-        <app-week-view [week]="date()" (daySelected)="open('day', $event)" />
-      }
-      @case ('month') {
-        <app-month-view [month]="date()" (daySelected)="open('day', $event)" />
-      }
-      @case ('year') {
-        <app-year-view [year]="date().getFullYear()" (monthSelected)="open('month', $event)" />
-      }
-    }
-  </main>
+    </main>
+  }
 </div>

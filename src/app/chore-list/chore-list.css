@@ -1,7 +1,13 @@
+:host {
+  display: block;
+}
+
+/* One column in the sidebar; blue and red side by side when the list has the whole page. */
 aside {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  align-items: start;
+  gap: 1.5rem 3rem;
 }
 
 h3 {

@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week. The header switches between the chore list, the calendar or both, and between light and dark; each device remembers its choice.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 
@@ -11,7 +11,6 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
   "chores": [
     {
       "name": "Take out the trash",
-      "icon": "🗑️",
       "color": "blue",
       "repeat": { "type": "weekly", "days": ["mon"] }
     }
@@ -20,7 +19,6 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
 ```
 
 - Each chore has a `name`, a `color` (`"blue"` or `"red"`) and a `repeat` rule.
-- An `icon` (one emoji, e.g. `"icon": "🧺"`) is optional. The month view then shows just the icon, with the name on hover; everywhere else the icon sits next to the name. If emoji show as empty boxes on the Pi, install an emoji font: `sudo apt install fonts-noto-color-emoji`.
 - If something in the file is wrong, the page shows a red box saying which chore and what to fix. The other chores keep working.
 
 ### Repeat rules

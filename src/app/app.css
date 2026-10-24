@@ -24,7 +24,9 @@ h2 {
   font-weight: 500;
 }
 
+.actions,
 .colors,
+.layout-switch,
 .navigation,
 .view-switch {
   display: flex;
@@ -80,6 +82,10 @@ button[aria-pressed='true'] {
   grid-template-columns: 18rem minmax(0, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
+}
+
+.layout.single {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 main {

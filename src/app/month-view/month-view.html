@@ -28,23 +28,17 @@
           {{ day.date.getDate() }}
         </button>
         @if (day.isInMonth) {
-          <div class="chores">
-            @for (chore of day.chores; track chore) {
-              <!-- With an icon only the icon shows; the name is in the tooltip and the chore list. -->
-              <button
-                type="button"
-                [class]="'chore ' + chore.color"
-                [class.icon-only]="chore.icon"
-                [class.done]="store.isDone(chore, day.date)"
-                [attr.aria-pressed]="store.isDone(chore, day.date)"
-                [attr.aria-label]="chore.name"
-                [title]="chore.name"
-                (click)="store.tickOff(chore, day.date)"
-              >
-                {{ chore.icon ?? chore.name }}
-              </button>
-            }
-          </div>
+          @for (chore of day.chores; track chore) {
+            <button
+              type="button"
+              [class]="'chore ' + chore.color"
+              [class.done]="store.isDone(chore, day.date)"
+              [attr.aria-pressed]="store.isDone(chore, day.date)"
+              (click)="store.tickOff(chore, day.date)"
+            >
+              {{ chore.name }}
+            </button>
+          }
         }
       </div>
     }

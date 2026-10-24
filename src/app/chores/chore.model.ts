@@ -11,8 +11,6 @@ export type ChoreColor = (typeof CHORE_COLORS)[number];
 export interface Chore {
   name: string;
   color: ChoreColor;
-  /** Optional emoji shown instead of the name in the month view, e.g. "🧺". */
-  icon?: string;
   repeat: Repeat;
 }
 

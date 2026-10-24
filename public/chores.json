@@ -2,7 +2,6 @@
   "chores": [
     {
       "name": "Take out the trash",
-      "icon": "🗑️",
       "color": "blue",
       "repeat": {
         "type": "weekly",
@@ -11,7 +10,6 @@
     },
     {
       "name": "Laundry",
-      "icon": "🧺",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -20,7 +18,6 @@
     },
     {
       "name": "Wash the dishes",
-      "icon": "🧽",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -29,7 +26,6 @@
     },
     {
       "name": "Wash the dishes",
-      "icon": "🧽",
       "color": "blue",
       "repeat": {
         "type": "weekly",
@@ -38,7 +34,6 @@
     },
     {
       "name": "Paper recycling",
-      "icon": "♻️",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -49,7 +44,6 @@
     },
     {
       "name": "Water the plants",
-      "icon": "🪴",
       "color": "blue",
       "repeat": {
         "type": "daily",
@@ -59,7 +53,6 @@
     },
     {
       "name": "Pay the rent",
-      "icon": "💶",
       "color": "red",
       "repeat": {
         "type": "monthly",
@@ -68,7 +61,6 @@
     },
     {
       "name": "Clean the fridge",
-      "icon": "🧊",
       "color": "blue",
       "repeat": {
         "type": "monthly",
@@ -78,7 +70,6 @@
     },
     {
       "name": "Descale the coffee machine",
-      "icon": "☕",
       "color": "red",
       "repeat": {
         "type": "monthly",
@@ -89,7 +80,6 @@
     },
     {
       "name": "Change the smoke detector battery",
-      "icon": "🔋",
       "color": "blue",
       "repeat": {
         "type": "yearly",
@@ -98,7 +88,6 @@
     },
     {
       "name": "Plumber visit",
-      "icon": "🔧",
       "color": "red",
       "repeat": {
         "type": "once",
@@ -107,7 +96,6 @@
     },
     {
       "name": "Clean the windows",
-      "icon": "🪟",
       "color": "blue",
       "repeat": {
         "type": "monthly",

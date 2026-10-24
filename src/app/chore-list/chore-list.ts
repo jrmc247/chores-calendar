@@ -25,7 +25,6 @@ export class ChoreList {
         .filter((chore) => chore.color === color)
         .map((chore) => ({
           name: chore.name,
-          icon: chore.icon,
           schedule: describeRepeat(chore.repeat),
           nextDue: this.store.nextDueDate(chore, today),
         })),

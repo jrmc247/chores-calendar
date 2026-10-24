@@ -1,34 +1,28 @@
 /* Colors used across the app. Change the blue and red shades here. */
 :root {
-  --blue: #4a7bd0;
-  --blue-tint: #eaf0fa;
-  --red: #d0605a;
-  --red-tint: #fbeceb;
+  /* Each color is light-dark(light theme, dark theme). */
+  --blue: light-dark(#4a7bd0, #7ea2e0);
+  --blue-tint: light-dark(#eaf0fa, #222c3d);
+  --red: light-dark(#d0605a, #e08a85);
+  --red-tint: light-dark(#fbeceb, #3a2626);
 
-  --background: #f6f6f4;
-  --surface: #ffffff;
-  --border: #e7e7e3;
-  --text: #2b2d31;
+  --background: light-dark(#f6f6f4, #151618);
+  --surface: light-dark(#ffffff, #1d1f22);
+  --border: light-dark(#e7e7e3, #2c2f33);
+  --text: light-dark(#2b2d31, #e6e6e3);
   --muted: #8b8e95;
-  --accent: #2b2d31;
+  --accent: light-dark(#2b2d31, #e6e6e3);
 
+  /* Follows the device setting until the theme switch picks one (see App). */
   color-scheme: light dark;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --blue: #7ea2e0;
-    --blue-tint: #222c3d;
-    --red: #e08a85;
-    --red-tint: #3a2626;
+:root[data-theme='light'] {
+  color-scheme: light;
+}
 
-    --background: #151618;
-    --surface: #1d1f22;
-    --border: #2c2f33;
-    --text: #e6e6e3;
-    --muted: #8b8e95;
-    --accent: #e6e6e3;
-  }
+:root[data-theme='dark'] {
+  color-scheme: dark;
 }
 
 /* Anything marked .blue or .red picks up that color. */
@@ -79,8 +73,4 @@ button {
   text-decoration: line-through;
   color: var(--muted);
   background: transparent;
-}
-
-.icon {
-  margin-right: 0.35em;
 }

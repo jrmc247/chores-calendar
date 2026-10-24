@@ -60,16 +60,3 @@
   border: none;
   background: transparent;
 }
-
-.chores {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 3px;
-}
-
-.chore.icon-only {
-  width: auto;
-  padding: 1px 5px;
-  font-size: 1rem;
-  line-height: 1.4;
-}

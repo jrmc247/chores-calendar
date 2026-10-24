@@ -6,9 +6,6 @@
     [class.done]="store.isDone(item.chore, start(), item.times)"
     (click)="store.tickOff(item.chore, start(), item.times)"
   >
-    @if (item.chore.icon) {
-      <span class="icon">{{ item.chore.icon }}</span>
-    }
     {{ item.chore.name }}
     @if (item.times > 1) {
       <span class="count">{{ store.doneCount(item.chore, start()) }}/{{ item.times }}</span>
