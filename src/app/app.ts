@@ -13,15 +13,16 @@ import { YearView } from './year-view/year-view';
 
 type CalendarView = 'day' | 'week' | 'month' | 'year';
 
-/** What the page shows: the chore list, the calendar, or both side by side. */
-const LAYOUTS = ['list', 'both', 'calendar'] as const;
-type Layout = (typeof LAYOUTS)[number];
+const PANEL_STATES = ['open', 'closed'] as const;
+type PanelState = (typeof PANEL_STATES)[number];
 
 const THEMES = ['light', 'dark'] as const;
 type Theme = (typeof THEMES)[number];
 
 /** Phones open on the day view; a month grid is too crowded there. */
 const isSmallScreen = () => window.matchMedia('(max-width: 600px)').matches;
+/** Below this width the chore list is a drawer over the calendar instead of a sidebar. */
+const isNarrowScreen = () => window.matchMedia('(max-width: 800px)').matches;
 const prefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matches;
 
 @Component({
@@ -37,13 +38,8 @@ export class App {
 
   protected readonly colors = CHORE_COLORS;
   protected readonly views: CalendarView[] = ['day', 'week', 'month', 'year'];
-  protected readonly layouts = LAYOUTS;
-  /** Remembered per device, so the phone and the wall screen can differ. */
-  protected readonly layout = storedSignal<Layout>(
-    'chores.layout',
-    isSmallScreen() ? 'calendar' : 'both',
-    LAYOUTS,
-  );
+  /** The chore list panel. Remembered on wide screens; a drawer on narrow ones always starts closed. */
+  protected readonly listPanel = storedSignal<PanelState>('chores.list', 'open', PANEL_STATES);
   /** Starts from the device setting; the switch overrides it on this device. */
   protected readonly theme = storedSignal<Theme>(
     'chores.theme',
@@ -52,6 +48,7 @@ export class App {
   );
 
   constructor() {
+    if (isNarrowScreen()) this.listPanel.set('closed');
     effect(() => (document.documentElement.dataset['theme'] = this.theme()));
   }
   protected readonly view = signal<CalendarView>(isSmallScreen() ? 'day' : 'month');
@@ -97,6 +94,10 @@ export class App {
   protected open(view: CalendarView, date: Date): void {
     this.date.set(date);
     this.view.set(view);
+  }
+
+  protected toggleList(): void {
+    this.listPanel.update((state) => (state === 'open' ? 'closed' : 'open'));
   }
 
   protected toggleTheme(): void {

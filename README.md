@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week. The header switches between the chore list, the calendar or both, and between light and dark; each device remembers its choice.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week. The panel button at the top left shows or hides the chore list (a drawer on phones), and the ☾/☀ button switches between light and dark; each device remembers its choice.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 

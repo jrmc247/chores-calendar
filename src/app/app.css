@@ -24,12 +24,13 @@ h2 {
   font-weight: 500;
 }
 
+.title,
 .actions,
 .colors,
-.layout-switch,
 .navigation,
 .view-switch {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
 }
 
@@ -77,15 +78,39 @@ button[aria-pressed='true'] {
   margin: 0.25rem 0 0;
 }
 
+.panel-toggle {
+  display: grid;
+  place-items: center;
+  padding: 0.35rem;
+  border-color: transparent;
+  background: transparent;
+}
+
+.panel-toggle:hover,
+.panel-toggle[aria-expanded='true'] {
+  border-color: var(--border);
+  background: var(--surface);
+}
+
+.panel-toggle svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+}
+
 .layout {
   display: grid;
-  grid-template-columns: 18rem minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: 1.5rem;
   margin-top: 1.5rem;
 }
 
-.layout.single {
-  grid-template-columns: minmax(0, 1fr);
+.layout.with-list {
+  grid-template-columns: 18rem minmax(0, 1fr);
+}
+
+.backdrop {
+  display: none;
 }
 
 main {
@@ -94,14 +119,29 @@ main {
   gap: 1rem;
 }
 
-/* On small screens the calendar comes first and the chore list below it. */
+/* On narrow screens the chore list slides in over the calendar as a drawer. */
 @media (max-width: 800px) {
-  .layout {
-    grid-template-columns: 1fr;
+  .layout.with-list {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   app-chore-list {
-    order: 1;
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 2;
+    width: min(85vw, 20rem);
+    padding: 1.25rem 1rem;
+    overflow-y: auto;
+    background: var(--background);
+    box-shadow: 0 0 2rem rgb(0 0 0 / 0.2);
+  }
+
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 1;
+    background: rgb(0 0 0 / 0.3);
   }
 }
 
