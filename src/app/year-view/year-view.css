@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 0.75rem;
-  border: none;
+  border: 1px solid var(--border);
   border-radius: 8px;
   font: inherit;
   color: inherit;
@@ -19,12 +19,13 @@
 }
 
 .month:hover {
-  outline: 2px solid var(--accent);
+  border-color: var(--muted);
 }
 
 h3 {
   margin: 0 0 0.5rem;
-  font-size: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .grid {
@@ -48,12 +49,15 @@ h3 {
   border-radius: 4px;
 }
 
-.day.today {
-  outline: 2px solid var(--accent);
+.number {
+  padding: 0 0.25rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
 }
 
-.number {
-  font-size: 0.75rem;
+.day.today .number {
+  color: var(--surface);
+  background: var(--accent);
 }
 
 .dots {

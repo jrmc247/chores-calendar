@@ -27,16 +27,18 @@
         <button type="button" class="number" (click)="daySelected.emit(day.date)">
           {{ day.date.getDate() }}
         </button>
-        @for (chore of day.chores; track chore) {
-          <button
-            type="button"
-            [class]="'chore ' + chore.color"
-            [class.done]="store.isDone(chore, day.date)"
-            [attr.aria-pressed]="store.isDone(chore, day.date)"
-            (click)="store.tickOff(chore, day.date)"
-          >
-            {{ chore.name }}
-          </button>
+        @if (day.isInMonth) {
+          @for (chore of day.chores; track chore) {
+            <button
+              type="button"
+              [class]="'chore ' + chore.color"
+              [class.done]="store.isDone(chore, day.date)"
+              [attr.aria-pressed]="store.isDone(chore, day.date)"
+              (click)="store.tickOff(chore, day.date)"
+            >
+              {{ chore.name }}
+            </button>
+          }
         }
       </div>
     }

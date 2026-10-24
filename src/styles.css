@@ -1,31 +1,33 @@
 /* Colors used across the app. Change the blue and red shades here. */
 :root {
-  --blue: #2563eb;
-  --blue-tint: #dbeafe;
-  --red: #dc2626;
-  --red-tint: #fee2e2;
+  --blue: #4a7bd0;
+  --blue-tint: #eaf0fa;
+  --red: #d0605a;
+  --red-tint: #fbeceb;
 
-  --background: #f4f4f5;
+  --background: #f6f6f4;
   --surface: #ffffff;
-  --text: #18181b;
-  --muted: #71717a;
-  --accent: #18181b;
+  --border: #e7e7e3;
+  --text: #2b2d31;
+  --muted: #8b8e95;
+  --accent: #2b2d31;
 
   color-scheme: light dark;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --blue: #3b82f6;
-    --blue-tint: #172554;
-    --red: #ef4444;
-    --red-tint: #450a0a;
+    --blue: #7ea2e0;
+    --blue-tint: #222c3d;
+    --red: #e08a85;
+    --red-tint: #3a2626;
 
-    --background: #09090b;
-    --surface: #18181b;
-    --text: #f4f4f5;
-    --muted: #a1a1aa;
-    --accent: #f4f4f5;
+    --background: #151618;
+    --surface: #1d1f22;
+    --border: #2c2f33;
+    --text: #e6e6e3;
+    --muted: #8b8e95;
+    --accent: #e6e6e3;
   }
 }
 
@@ -53,4 +55,28 @@ body {
 
 button {
   font: inherit;
+}
+
+/* A chore on the calendar: a soft tint with a colored edge. Click to tick it off. */
+.chore {
+  display: block;
+  width: 100%;
+  padding: 3px 6px;
+  border: none;
+  border-left: 3px solid var(--person-color);
+  border-radius: 4px;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--person-tint);
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chore.done {
+  text-decoration: line-through;
+  color: var(--muted);
+  background: transparent;
 }

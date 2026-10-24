@@ -14,12 +14,14 @@
 
 h1 {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
 }
 
 h2 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  font-weight: 500;
 }
 
 .colors,
@@ -30,8 +32,8 @@ h2 {
 }
 
 button {
-  padding: 0.4rem 0.9rem;
-  border: 1px solid var(--muted);
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--border);
   border-radius: 6px;
   color: var(--text);
   background: var(--surface);
@@ -39,19 +41,26 @@ button {
 }
 
 button[aria-pressed='true'] {
-  color: var(--background);
-  background: var(--text);
+  border-color: var(--accent);
+  color: var(--surface);
+  background: var(--accent);
 }
 
-.color {
-  border: 2px solid var(--person-color);
-  color: var(--person-color);
-  font-weight: 600;
+/* Color filter: a dot in the person's color, filled in when selected. */
+.color::before {
+  content: '';
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  background: var(--person-color);
 }
 
 .color[aria-pressed='true'] {
-  color: white;
-  background: var(--person-color);
+  border-color: var(--person-color);
+  color: var(--text);
+  background: var(--person-tint);
 }
 
 .problems {
