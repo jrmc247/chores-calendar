@@ -1,6 +1,6 @@
 import { parseIsoDate, toIsoDate, addDays } from '../shared/dates';
 import { Repeat } from './chore.model';
-import { describeRepeat, isDue } from './recurrence';
+import { describeRepeat, isDue, timesDueIn } from './recurrence';
 
 /** Every due day between two dates (inclusive), as "YYYY-MM-DD". */
 function dueDays(rule: Repeat, from: string, to: string): string[] {
@@ -106,6 +106,41 @@ describe('isDue', () => {
   });
 });
 
+describe('timesDueIn', () => {
+  const monday = parseIsoDate('2026-10-19')!;
+  const firstOfMonth = parseIsoDate('2026-10-01')!;
+
+  it('gives weekly anytime chores to every week', () => {
+    const rule: Repeat = { type: 'weekly', times: 2 };
+    expect(timesDueIn(rule, 'week', monday)).toBe(2);
+    expect(timesDueIn(rule, 'month', firstOfMonth)).toBe(0);
+    expect(dueDays(rule, '2026-10-01', '2026-10-31')).toEqual([]);
+  });
+
+  it('handles every second week counted from the start date', () => {
+    const rule: Repeat = { type: 'weekly', times: 1, every: 2, start: '2026-10-07' };
+    expect(timesDueIn(rule, 'week', parseIsoDate('2026-10-12')!)).toBe(0);
+    expect(timesDueIn(rule, 'week', monday)).toBe(1);
+  });
+
+  it('gives monthly anytime chores to the month only', () => {
+    const rule: Repeat = { type: 'monthly', times: 1 };
+    expect(timesDueIn(rule, 'month', firstOfMonth)).toBe(1);
+    expect(timesDueIn(rule, 'week', monday)).toBe(0);
+  });
+
+  it('respects start and end dates', () => {
+    const rule: Repeat = { type: 'weekly', times: 1, start: '2026-10-25', end: '2026-11-01' };
+    expect(timesDueIn(rule, 'week', monday)).toBe(1); // the week of 19-25 Oct overlaps
+    expect(timesDueIn(rule, 'week', parseIsoDate('2026-10-12')!)).toBe(0);
+    expect(timesDueIn(rule, 'week', parseIsoDate('2026-11-02')!)).toBe(0);
+  });
+
+  it('ignores chores with fixed days', () => {
+    expect(timesDueIn({ type: 'weekly', days: ['mon'] }, 'week', monday)).toBe(0);
+  });
+});
+
 describe('describeRepeat', () => {
   it.each<[Repeat, string]>([
     [{ type: 'weekly', days: ['mon'] }, 'Every Monday'],
@@ -118,6 +153,10 @@ describe('describeRepeat', () => {
     [{ type: 'monthly', weekday: 'sat', nth: 1 }, 'Monthly on the first Saturday'],
     [{ type: 'once', dates: ['2026-11-14'] }, 'On 14 Nov 2026'],
     [{ type: 'yearly', dates: ['03-01'] }, 'Every year on 1 Mar'],
+    [{ type: 'weekly', times: 1 }, 'Once a week'],
+    [{ type: 'weekly', times: 2 }, 'Twice a week'],
+    [{ type: 'weekly', times: 1, every: 2, start: '2026-10-05' }, 'Once every 2 weeks'],
+    [{ type: 'monthly', times: 3 }, '3 times a month'],
   ])('describes %j as "%s"', (rule, text) => {
     expect(describeRepeat(rule)).toBe(text);
   });

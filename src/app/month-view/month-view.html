@@ -1,22 +1,42 @@
+@if (monthChores().length) {
+  <app-anytime-strip
+    class="month-strip"
+    label="Anytime this month"
+    [start]="monthStart()"
+    [items]="monthChores()"
+  />
+}
+
 <div class="grid">
   @for (weekday of weekdays; track weekday) {
     <div class="weekday">{{ weekday }}</div>
   }
 
-  @for (day of days(); track day.date.getTime()) {
-    <div class="day" [class.outside]="!day.isInMonth" [class.today]="day.isToday">
-      <span class="number">{{ day.date.getDate() }}</span>
-      @for (chore of day.chores; track chore) {
-        <button
-          type="button"
-          [class]="'chore ' + chore.color"
-          [class.done]="store.isDone(chore, day.date)"
-          [attr.aria-pressed]="store.isDone(chore, day.date)"
-          (click)="store.toggleDone(chore, day.date)"
-        >
-          {{ chore.name }}
-        </button>
-      }
-    </div>
+  @for (week of weeks(); track week.start.getTime()) {
+    @if (week.anytimeChores.length) {
+      <app-anytime-strip
+        class="week-strip"
+        label="Anytime"
+        [start]="week.start"
+        [items]="week.anytimeChores"
+      />
+    }
+
+    @for (day of week.days; track day.date.getTime()) {
+      <div class="day" [class.outside]="!day.isInMonth" [class.today]="day.isToday">
+        <span class="number">{{ day.date.getDate() }}</span>
+        @for (chore of day.chores; track chore) {
+          <button
+            type="button"
+            [class]="'chore ' + chore.color"
+            [class.done]="store.isDone(chore, day.date)"
+            [attr.aria-pressed]="store.isDone(chore, day.date)"
+            (click)="store.tickOff(chore, day.date)"
+          >
+            {{ chore.name }}
+          </button>
+        }
+      </div>
+    }
   }
 </div>

@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the month or year view. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the month or year view. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 
@@ -37,6 +37,9 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
 | Last Friday of the month      | `{ "type": "monthly", "weekday": "fri", "nth": "last" }`                   |
 | Same day every year           | `{ "type": "yearly", "dates": ["03-01", "09-01"] }`                        |
 | Once, on specific dates       | `{ "type": "once", "dates": ["2026-11-14"] }`                              |
+| Twice a week, any day         | `{ "type": "weekly", "times": 2 }`                                         |
+| Once every 2 weeks, any day   | `{ "type": "weekly", "times": 1, "every": 2, "start": "2026-10-05" }`      |
+| Once a month, any day         | `{ "type": "monthly", "times": 1 }`                                        |
 
 Details:
 
@@ -44,6 +47,7 @@ Details:
 - `every` repeats every N days, weeks or months, counted from `start`. `start` is required when `every` is above 1. For weekly rules, the week that contains `start` is the first one, so pick a `start` in a week where the chore is due.
 - `start` and `end` also work on their own with `daily`, `weekly` and `monthly`, to limit when a chore applies (e.g. `"end": "2026-12-31"`).
 - A day that does not exist in a month (e.g. the 31st in November) is skipped. Use `"last"` for "end of the month".
+- **Anytime chores** (laundry, taking out the trash) use `times` instead of `days`: they have no fixed day and show in an "Anytime" strip above each week, or above the month for monthly ones. Click one each time you do it; with `"times": 2` it counts 0/2, 1/2, 2/2. They don't appear in the year view.
 - To split a chore between blue and red on different days, add it twice with different colors and days (see "Wash the dishes" in the sample file).
 
 To change the colors themselves, edit `--blue` and `--red` at the top of `src/styles.css`.
@@ -66,6 +70,7 @@ Code layout (`src/app`):
 - `chores/validate-chores.ts`: the readable error messages for mistakes in `chores.json`.
 - `chores/chore-store.ts`: loads the file, filters by color, keeps the ticked-off state.
 - `chore-list`, `month-view`, `year-view`: the three parts of the screen.
+- `anytime-strip`: the row of anytime chores above a week or month.
 - `shared/dates.ts`: date helpers (weeks start on Monday).
 
 ## Hosting on a Raspberry Pi

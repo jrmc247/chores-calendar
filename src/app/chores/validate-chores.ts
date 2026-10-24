@@ -1,5 +1,5 @@
 import { WEEKDAYS, parseIsoDate } from '../shared/dates';
-import { Chore, CHORE_COLORS } from './chore.model';
+import { Chore, CHORE_COLORS, MonthlyRule, WeeklyRule } from './chore.model';
 
 /**
  * Checks one hand-written chore from chores.json.
@@ -26,10 +26,16 @@ function findProblems(chore: Chore): string[] {
       check(isList(rule.dates, isMonthDay), '"dates" must be a list like ["03-21"]');
       return problems;
     case 'weekly':
-      check(isList(rule.days, isWeekday), `"days" must be a list of ${WEEKDAYS.join(', ')}`);
+      if (rule.times !== undefined) {
+        checkTimes(rule, check);
+      } else {
+        check(isList(rule.days, isWeekday), `"days" must be a list of ${WEEKDAYS.join(', ')}`);
+      }
       break;
     case 'monthly':
-      if (rule.days !== undefined) {
+      if (rule.times !== undefined) {
+        checkTimes(rule, check);
+      } else if (rule.days !== undefined) {
         check(isList(rule.days, isDayOfMonth), '"days" must be a list of 1 to 31 or "last"');
       } else {
         check(isWeekday(rule.weekday), '"weekday" must be one of ' + WEEKDAYS.join(', '));
@@ -49,6 +55,16 @@ function findProblems(chore: Chore): string[] {
   check(rule.start === undefined || isIsoDate(rule.start), '"start" must look like "2026-10-05"');
   check(rule.end === undefined || isIsoDate(rule.end), '"end" must look like "2026-12-31"');
   return problems;
+}
+
+/** Anytime chores: `times` replaces the days, so they must not be combined. */
+function checkTimes(rule: WeeklyRule | MonthlyRule, check: (ok: boolean, problem: string) => void) {
+  check(
+    Number.isInteger(rule.times) && rule.times! >= 1,
+    '"times" must be a whole number of 1 or more',
+  );
+  const fixedDay = rule.days ?? (rule.type === 'monthly' ? rule.weekday : undefined);
+  check(fixedDay === undefined, 'use either "times" or fixed days, not both');
 }
 
 function isList<T>(value: unknown, isItem: (item: unknown) => boolean): value is T[] {

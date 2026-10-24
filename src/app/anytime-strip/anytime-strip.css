@@ -1,0 +1,35 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 0.3rem 0.35rem;
+  border-radius: 6px;
+  background: var(--surface);
+}
+
+.label {
+  margin-right: 0.25rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.chore {
+  padding: 2px 8px;
+  border: 2px dashed var(--person-color);
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: var(--person-color);
+  background: var(--person-tint);
+  cursor: pointer;
+}
+
+.count {
+  margin-left: 0.25rem;
+  font-weight: 600;
+}
+
+.chore.done {
+  text-decoration: line-through;
+  opacity: 0.4;
+}

@@ -1,5 +1,7 @@
 import {
   Weekday,
+  addDays,
+  addMonths,
   daysBetween,
   daysInMonth,
   monthsBetween,
@@ -11,6 +13,28 @@ import {
 import { DayOfMonth, DailyRule, MonthlyRule, NthWeek, Repeat, WeeklyRule } from './chore.model';
 
 type RepeatingRule = DailyRule | WeeklyRule | MonthlyRule;
+type AnytimeRule = (WeeklyRule | MonthlyRule) & { times: number };
+
+export type Period = 'week' | 'month';
+const PERIOD_RULE = { week: 'weekly', month: 'monthly' } as const;
+
+/** Anytime chores have `times` instead of fixed days, and are never due on a particular day. */
+export function isAnytime(rule: Repeat): rule is AnytimeRule {
+  return (rule.type === 'weekly' || rule.type === 'monthly') && rule.times !== undefined;
+}
+
+/**
+ * How many times an anytime chore is due in the week (starting Monday) or month
+ * (starting on the 1st) that begins on `start`. 0 for every other kind of chore.
+ */
+export function timesDueIn(rule: Repeat, period: Period, start: Date): number {
+  if (!isAnytime(rule) || rule.type !== PERIOD_RULE[period]) return 0;
+  const end = period === 'week' ? addDays(start, 6) : addDays(addMonths(start, 1), -1);
+  const overlapsRange =
+    (!rule.start || toIsoDate(end) >= rule.start) && (!rule.end || toIsoDate(start) <= rule.end);
+  const stepsBetween = period === 'week' ? weeksBetween : monthsBetween;
+  return overlapsRange && isOnStep(rule, stepsBetween, start) ? rule.times : 0;
+}
 
 /** True when a chore with this rule is due on the given day. */
 export function isDue(rule: Repeat, date: Date): boolean {
@@ -24,7 +48,7 @@ export function isDue(rule: Repeat, date: Date): boolean {
     case 'weekly':
       return (
         isInRange(rule, date) &&
-        rule.days.includes(weekdayOf(date)) &&
+        !!rule.days?.includes(weekdayOf(date)) &&
         isOnStep(rule, weeksBetween, date)
       );
     case 'monthly':
@@ -75,8 +99,9 @@ const WEEKDAY_NAMES: Record<Weekday, string> = {
   sun: 'Sunday',
 };
 
-/** e.g. "Every Monday", "Every 2 weeks on Mon, Wed", "Monthly on the last day". */
+/** e.g. "Every Monday", "Every 2 weeks on Mon and Wed", "Monthly on the last day", "Twice a week". */
 export function describeRepeat(rule: Repeat): string {
+  if (isAnytime(rule)) return withEnd(rule, describeAnytime(rule));
   switch (rule.type) {
     case 'once':
       return `On ${listOf(rule.dates.map((d) => formatIsoDate(d)))}`;
@@ -85,7 +110,7 @@ export function describeRepeat(rule: Repeat): string {
     case 'daily':
       return withEnd(rule, every(rule, 'day', 'days'));
     case 'weekly': {
-      const days = describeWeekdays(rule.days);
+      const days = describeWeekdays(rule.days!);
       return withEnd(
         rule,
         isEveryTime(rule) ? `Every ${days}` : `${every(rule, '', 'weeks')} on ${days}`,
@@ -99,6 +124,13 @@ export function describeRepeat(rule: Repeat): string {
       );
     }
   }
+}
+
+/** e.g. "Twice a week", "Once every 2 weeks", "3 times a month". */
+function describeAnytime(rule: AnytimeRule): string {
+  const times = ['Once', 'Twice'][rule.times - 1] ?? `${rule.times} times`;
+  const unit = rule.type === 'weekly' ? 'week' : 'month';
+  return isEveryTime(rule) ? `${times} a ${unit}` : `${times} every ${rule.every} ${unit}s`;
 }
 
 function isEveryTime(rule: RepeatingRule): boolean {
