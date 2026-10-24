@@ -1,11 +1,11 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, output } from '@angular/core';
 import { AnytimeStrip } from '../anytime-strip/anytime-strip';
 import { ChoreStore } from '../chores/chore-store';
 import { Clock } from '../shared/clock';
 import { CALENDAR_WEEKDAYS, isSameDay, monthGrid, startOfMonth } from '../shared/dates';
 
 /**
- * One month as a grid of days. Click a chore to tick it off for that day.
+ * One month as a grid of days. Click a chore to tick it off, or a day number to open that day.
  * Anytime chores sit in a strip above the month and above each week.
  */
 @Component({
@@ -17,6 +17,7 @@ import { CALENDAR_WEEKDAYS, isSameDay, monthGrid, startOfMonth } from '../shared
 export class MonthView {
   /** Any day in the month to show. */
   readonly month = input.required<Date>();
+  readonly daySelected = output<Date>();
 
   protected readonly store = inject(ChoreStore);
   private readonly clock = inject(Clock);

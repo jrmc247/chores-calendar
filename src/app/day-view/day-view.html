@@ -1,0 +1,24 @@
+<ul>
+  @for (chore of chores(); track chore) {
+    <li>
+      <button
+        type="button"
+        [class]="'chore ' + chore.color"
+        [class.done]="store.isDone(chore, day())"
+        [attr.aria-pressed]="store.isDone(chore, day())"
+        (click)="store.tickOff(chore, day())"
+      >
+        {{ chore.name }}
+      </button>
+    </li>
+  } @empty {
+    <li class="empty">Nothing due on this day.</li>
+  }
+</ul>
+
+@if (weekChores().length) {
+  <app-anytime-strip label="Anytime this week" [start]="weekStart()" [items]="weekChores()" />
+}
+@if (monthChores().length) {
+  <app-anytime-strip label="Anytime this month" [start]="monthStart()" [items]="monthChores()" />
+}

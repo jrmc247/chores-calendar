@@ -37,22 +37,27 @@
         <button type="button" (click)="step(1)" aria-label="Next">›</button>
       </div>
 
-      <h2>{{ month() | date: (view() === 'month' ? 'MMMM y' : 'y') }}</h2>
+      <h2>{{ date() | date: headingFormat() }}</h2>
 
       <div class="view-switch" role="group" aria-label="View">
-        <button type="button" [attr.aria-pressed]="view() === 'month'" (click)="view.set('month')">
-          Month
-        </button>
-        <button type="button" [attr.aria-pressed]="view() === 'year'" (click)="view.set('year')">
-          Year
-        </button>
+        @for (option of views; track option) {
+          <button type="button" [attr.aria-pressed]="view() === option" (click)="view.set(option)">
+            {{ option | titlecase }}
+          </button>
+        }
       </div>
     </div>
 
-    @if (view() === 'month') {
-      <app-month-view [month]="month()" />
-    } @else {
-      <app-year-view [year]="month().getFullYear()" (monthSelected)="openMonth($event)" />
+    @switch (view()) {
+      @case ('day') {
+        <app-day-view [day]="date()" />
+      }
+      @case ('month') {
+        <app-month-view [month]="date()" (daySelected)="open('day', $event)" />
+      }
+      @case ('year') {
+        <app-year-view [year]="date().getFullYear()" (monthSelected)="open('month', $event)" />
+      }
     }
   </main>
 </div>

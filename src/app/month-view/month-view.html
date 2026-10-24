@@ -24,7 +24,9 @@
 
     @for (day of week.days; track day.date.getTime()) {
       <div class="day" [class.outside]="!day.isInMonth" [class.today]="day.isToday">
-        <span class="number">{{ day.date.getDate() }}</span>
+        <button type="button" class="number" (click)="daySelected.emit(day.date)">
+          {{ day.date.getDate() }}
+        </button>
         @for (chore of day.chores; track chore) {
           <button
             type="button"

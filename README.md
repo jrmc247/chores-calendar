@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the month or year view. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, month or year view. Phones open on the day view; click a day number in the month view to open that day. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 
@@ -69,7 +69,7 @@ Code layout (`src/app`):
 - `chores/recurrence.ts`: decides whether a chore is due on a day, and describes rules in words.
 - `chores/validate-chores.ts`: the readable error messages for mistakes in `chores.json`.
 - `chores/chore-store.ts`: loads the file, filters by color, keeps the ticked-off state.
-- `chore-list`, `month-view`, `year-view`: the three parts of the screen.
+- `chore-list`, `day-view`, `month-view`, `year-view`: the parts of the screen.
 - `anytime-strip`: the row of anytime chores above a week or month.
 - `shared/dates.ts`: date helpers (weeks start on Monday).
 
