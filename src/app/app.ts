@@ -1,8 +1,8 @@
-import { DatePipe } from '@angular/common';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { Component, inject, signal } from '@angular/core';
 import { ChoreList } from './chore-list/chore-list';
 import { ChoreStore, ColorFilter } from './chores/chore-store';
-import { PERSON_COLORS } from './chores/chore.model';
+import { CHORE_COLORS } from './chores/chore.model';
 import { MonthView } from './month-view/month-view';
 import { Clock } from './shared/clock';
 import { addMonths, startOfMonth } from './shared/dates';
@@ -12,7 +12,7 @@ type CalendarView = 'month' | 'year';
 
 @Component({
   selector: 'app-root',
-  imports: [DatePipe, ChoreList, MonthView, YearView],
+  imports: [DatePipe, TitleCasePipe, ChoreList, MonthView, YearView],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -20,7 +20,7 @@ export class App {
   protected readonly store = inject(ChoreStore);
   private readonly clock = inject(Clock);
 
-  protected readonly colors = PERSON_COLORS;
+  protected readonly colors = CHORE_COLORS;
   protected readonly view = signal<CalendarView>('month');
   /** First day of the month on screen (or a month in the year on screen). */
   protected readonly month = signal(startOfMonth(this.clock.today()));

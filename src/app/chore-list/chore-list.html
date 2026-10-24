@@ -1,7 +1,7 @@
 <aside>
   @for (group of groups(); track group.color) {
     <section [class]="group.color">
-      <h3>{{ group.person }}</h3>
+      <h3>{{ group.color | titlecase }}</h3>
       <ul>
         @for (chore of group.chores; track chore.name) {
           <li>

@@ -1,15 +1,15 @@
 <header class="top-bar">
   <h1>Household chores</h1>
 
-  <nav class="people" aria-label="Show chores of">
+  <nav class="colors" aria-label="Show only">
     @for (color of colors; track color) {
       <button
         type="button"
-        [class]="'person ' + color"
+        [class]="'color ' + color"
         [attr.aria-pressed]="store.colorFilter() === color"
         (click)="toggleFilter(color)"
       >
-        {{ store.people()[color] }}
+        {{ color | titlecase }}
       </button>
     }
   </nav>

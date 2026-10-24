@@ -2,16 +2,15 @@ import { Weekday } from '../shared/dates';
 
 /** Shape of public/chores.json. See the README for examples. */
 export interface ChoresFile {
-  people: Record<PersonColor, string>;
   chores: Chore[];
 }
 
-export const PERSON_COLORS = ['blue', 'red'] as const;
-export type PersonColor = (typeof PERSON_COLORS)[number];
+export const CHORE_COLORS = ['blue', 'red'] as const;
+export type ChoreColor = (typeof CHORE_COLORS)[number];
 
 export interface Chore {
   name: string;
-  color: PersonColor;
+  color: ChoreColor;
   repeat: Repeat;
 }
 

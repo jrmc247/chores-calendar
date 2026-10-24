@@ -1,4 +1,4 @@
-/* Colors used across the app. Change a person's color here. */
+/* Colors used across the app. Change the blue and red shades here. */
 :root {
   --blue: #2563eb;
   --blue-tint: #dbeafe;
@@ -29,7 +29,7 @@
   }
 }
 
-/* Anything marked .blue or .red picks up that person's color. */
+/* Anything marked .blue or .red picks up that color. */
 .blue {
   --person-color: var(--blue);
   --person-tint: var(--blue-tint);

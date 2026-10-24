@@ -1,5 +1,5 @@
 import { WEEKDAYS, parseIsoDate } from '../shared/dates';
-import { Chore, PERSON_COLORS } from './chore.model';
+import { Chore, CHORE_COLORS } from './chore.model';
 
 /**
  * Checks one hand-written chore from chores.json.
@@ -12,8 +12,7 @@ export function validateChore(chore: Chore, position: number): string[] {
 
 function findProblems(chore: Chore): string[] {
   if (typeof chore?.name !== 'string' || !chore.name.trim()) return ['needs a "name"'];
-  if (!PERSON_COLORS.includes(chore.color))
-    return [`"color" must be ${PERSON_COLORS.join(' or ')}`];
+  if (!CHORE_COLORS.includes(chore.color)) return [`"color" must be ${CHORE_COLORS.join(' or ')}`];
 
   const rule = chore.repeat;
   const problems: string[] = [];

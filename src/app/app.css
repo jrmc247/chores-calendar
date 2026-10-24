@@ -22,7 +22,7 @@ h2 {
   font-size: 1.25rem;
 }
 
-.people,
+.colors,
 .navigation,
 .view-switch {
   display: flex;
@@ -43,13 +43,13 @@ button[aria-pressed='true'] {
   background: var(--text);
 }
 
-.person {
+.color {
   border: 2px solid var(--person-color);
   color: var(--person-color);
   font-weight: 600;
 }
 
-.person[aria-pressed='true'] {
+.color[aria-pressed='true'] {
   color: white;
   background: var(--person-color);
 }

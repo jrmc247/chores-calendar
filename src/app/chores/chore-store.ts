@@ -1,11 +1,11 @@
 import { httpResource } from '@angular/common/http';
 import { Injectable, computed, signal } from '@angular/core';
 import { addDays, toIsoDate } from '../shared/dates';
-import { Chore, ChoresFile, PersonColor } from './chore.model';
+import { Chore, ChoresFile, ChoreColor } from './chore.model';
 import { isDue } from './recurrence';
 import { validateChore } from './validate-chores';
 
-export type ColorFilter = PersonColor | 'all';
+export type ColorFilter = ChoreColor | 'all';
 
 /** Loads chores.json and answers "what is due when" for the whole app. */
 @Injectable({ providedIn: 'root' })
@@ -18,10 +18,6 @@ export class ChoreStore {
 
   readonly colorFilter = signal<ColorFilter>('all');
   readonly isLoading = this.file.isLoading;
-
-  readonly people = computed<Record<PersonColor, string>>(
-    () => this.file.value()?.people ?? { blue: 'Blue', red: 'Red' },
-  );
 
   private readonly checkedChores = computed(() =>
     (this.file.value()?.chores ?? []).map((chore, i) => ({
@@ -36,7 +32,7 @@ export class ChoreStore {
     return this.checkedChores().flatMap((c) => c.problems);
   });
 
-  /** Valid chores, narrowed to the selected person. */
+  /** Valid chores, narrowed to the selected color. */
   readonly chores = computed(() => {
     const filter = this.colorFilter();
     return this.checkedChores()

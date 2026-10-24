@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by person, and appear on their due days in the month or year view. Each person has a color (blue or red). Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the month or year view. Each chore is blue or red, and you decide between you who is which color. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 
@@ -8,7 +8,6 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
 
 ```json
 {
-  "people": { "blue": "Jérôme", "red": "Partner" },
   "chores": [
     {
       "name": "Take out the trash",
@@ -19,7 +18,6 @@ All chores live in one file, `public/chores.json`. The app reads it when the pag
 }
 ```
 
-- `people` gives each color a name. It is shown in the header (click it to show only that person) and above the chore list.
 - Each chore has a `name`, a `color` (`"blue"` or `"red"`) and a `repeat` rule.
 - If something in the file is wrong, the page shows a red box saying which chore and what to fix. The other chores keep working.
 
@@ -46,7 +44,7 @@ Details:
 - `every` repeats every N days, weeks or months, counted from `start`. `start` is required when `every` is above 1. For weekly rules, the week that contains `start` is the first one, so pick a `start` in a week where the chore is due.
 - `start` and `end` also work on their own with `daily`, `weekly` and `monthly`, to limit when a chore applies (e.g. `"end": "2026-12-31"`).
 - A day that does not exist in a month (e.g. the 31st in November) is skipped. Use `"last"` for "end of the month".
-- To split a chore between people on different days, add it twice with different colors and days (see "Wash the dishes" in the sample file).
+- To split a chore between blue and red on different days, add it twice with different colors and days (see "Wash the dishes" in the sample file).
 
 To change the colors themselves, edit `--blue` and `--red` at the top of `src/styles.css`.
 
@@ -66,7 +64,7 @@ Code layout (`src/app`):
 - `chores/chore.model.ts`: the shape of `chores.json`.
 - `chores/recurrence.ts`: decides whether a chore is due on a day, and describes rules in words.
 - `chores/validate-chores.ts`: the readable error messages for mistakes in `chores.json`.
-- `chores/chore-store.ts`: loads the file, filters by person, keeps the ticked-off state.
+- `chores/chore-store.ts`: loads the file, filters by color, keeps the ticked-off state.
 - `chore-list`, `month-view`, `year-view`: the three parts of the screen.
 - `shared/dates.ts`: date helpers (weeks start on Monday).
 
