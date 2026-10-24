@@ -35,6 +35,15 @@ describe('validateChore', () => {
     ).toEqual(['Chore 1 "Trash": "every": 2 needs a "start" date']);
   });
 
+  it('accepts anytime chores and rejects mixing times with days', () => {
+    expect(validateChore(chore({ repeat: { type: 'weekly', times: 2 } }), 0)).toEqual([]);
+    expect(validateChore(chore({ repeat: { type: 'monthly', times: 1 } }), 0)).toEqual([]);
+    expect(
+      validateChore(chore({ repeat: { type: 'weekly', times: 2, days: ['mon'] } }), 0),
+    ).toHaveLength(1);
+    expect(validateChore(chore({ repeat: { type: 'weekly', times: 0 } }), 0)).toHaveLength(1);
+  });
+
   it('rejects an unknown repeat type', () => {
     expect(validateChore(chore({ repeat: { type: 'hourly' } }), 0)).toHaveLength(1);
   });

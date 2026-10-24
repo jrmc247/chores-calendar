@@ -26,6 +26,11 @@ interface Interval {
   end?: string;
 }
 
+/** For chores without a fixed day: how many times per week or month. */
+interface Anytime {
+  times?: number;
+}
+
 /** Specific dates, e.g. { "type": "once", "dates": ["2026-11-14"] } */
 export interface OnceRule {
   type: 'once';
@@ -37,20 +42,24 @@ export interface DailyRule extends Interval {
   type: 'daily';
 }
 
-/** e.g. { "type": "weekly", "days": ["mon", "wed"] } */
-export interface WeeklyRule extends Interval {
+/**
+ * Fixed days:             { "type": "weekly", "days": ["mon", "wed"] }
+ * or any day of the week: { "type": "weekly", "times": 2 }
+ */
+export interface WeeklyRule extends Interval, Anytime {
   type: 'weekly';
-  days: Weekday[];
+  days?: Weekday[];
 }
 
 export type DayOfMonth = number | 'last';
 export type NthWeek = 1 | 2 | 3 | 4 | 5 | 'last';
 
 /**
- * Either fixed days:      { "type": "monthly", "days": [1, 15, "last"] }
- * or an nth weekday:      { "type": "monthly", "weekday": "sat", "nth": 1 }
+ * Fixed days:              { "type": "monthly", "days": [1, 15, "last"] }
+ * an nth weekday:          { "type": "monthly", "weekday": "sat", "nth": 1 }
+ * or any day of the month: { "type": "monthly", "times": 1 }
  */
-export interface MonthlyRule extends Interval {
+export interface MonthlyRule extends Interval, Anytime {
   type: 'monthly';
   days?: DayOfMonth[];
   weekday?: Weekday;

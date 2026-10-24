@@ -1,0 +1,14 @@
+<span class="label">{{ label() }}</span>
+@for (item of items(); track item.chore) {
+  <button
+    type="button"
+    [class]="'chore ' + item.chore.color"
+    [class.done]="store.isDone(item.chore, start(), item.times)"
+    (click)="store.tickOff(item.chore, start(), item.times)"
+  >
+    {{ item.chore.name }}
+    @if (item.times > 1) {
+      <span class="count">{{ store.doneCount(item.chore, start()) }}/{{ item.times }}</span>
+    }
+  </button>
+}
