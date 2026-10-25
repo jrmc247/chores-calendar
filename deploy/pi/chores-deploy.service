@@ -1,0 +1,8 @@
+[Unit]
+Description=Deploy the latest chores calendar from GitHub
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/opt/chores-calendar/deploy/pi/update.sh

@@ -1,0 +1,183 @@
+{
+  "chores": [
+    {
+      "name": "Lüften",
+      "color": "blue",
+      "repeat": {
+        "type": "daily"
+      }
+    },
+    {
+      "name": "Staubsaugroboter leeren",
+      "color": "blue",
+      "repeat": {
+        "type": "weekly",
+        "days": ["mon", "wed", "fri"]
+      }
+    },
+    {
+      "name": "Staubsaugroboter nass",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "days": ["sun"]
+      }
+    },
+    {
+      "name": "Kleines Bad",
+      "color": "blue",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Grosses Bad",
+      "color": "blue",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Kleider waschen",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "times": 2
+      }
+    },
+    {
+      "name": "Küche Oberflächen putzen",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Kompost rausbringen + Behälter waschen",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Müll rausbringen",
+      "color": "blue",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Entstauben + Oberflächen feucht",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 2
+      }
+    },
+    {
+      "name": "Katzenbrunnen reinigen",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 2
+      }
+    },
+    {
+      "name": "Entsorgen",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 2
+      }
+    },
+    {
+      "name": "Bettwäsche waschen + neubeziehen",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Kühlschrank putzen + aufräumen",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Geschirrmaschine reinigen",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 3,
+        "start": "2026-10-01"
+      }
+    },
+    {
+      "name": "Backofen reinigen",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 6,
+        "start": "2026-10-01"
+      }
+    },
+    {
+      "name": "Fenster putzen",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 6,
+        "start": "2026-11-01"
+      }
+    },
+    {
+      "name": "Waschmaschine reinigen",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 6,
+        "start": "2026-12-01"
+      }
+    },
+    {
+      "name": "Pflanzen giessen",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Frühlingsputz",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 12,
+        "start": "2027-03-01"
+      }
+    },
+    {
+      "name": "Frühlingsputz",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 12,
+        "start": "2027-03-01"
+      }
+    }
+  ]
+}
