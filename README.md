@@ -48,7 +48,7 @@ Details:
 - `start` and `end` also work on their own with `daily`, `weekly` and `monthly`, to limit when a chore applies (e.g. `"end": "2026-12-31"`).
 - A day that does not exist in a month (e.g. the 31st in November) is skipped. Use `"last"` for "end of the month".
 - **Anytime chores** (laundry, taking out the trash) use `times` instead of `days`: they have no fixed day and show in an "Anytime" strip above each week, or above the month for monthly ones. Click one each time you do it; with `"times": 2` it counts 0/2, 1/2, 2/2. They don't appear in the year view.
-- To split a chore between blue and red on different days, add it twice with different colors and days (see "Abwaschen" in the sample file).
+- To split a chore between blue and red on different days, add it twice with different colors and days.
 
 To change the colors themselves, edit `--blue` and `--red` at the top of `src/styles.css`.
 
