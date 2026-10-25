@@ -150,6 +150,34 @@
         "every": 6,
         "start": "2026-12-01"
       }
+    },
+    {
+      "name": "Pflanzen giessen",
+      "color": "red",
+      "repeat": {
+        "type": "weekly",
+        "times": 1
+      }
+    },
+    {
+      "name": "Frühlingsputz",
+      "color": "blue",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 12,
+        "start": "2027-03-01"
+      }
+    },
+    {
+      "name": "Frühlingsputz",
+      "color": "red",
+      "repeat": {
+        "type": "monthly",
+        "times": 1,
+        "every": 12,
+        "start": "2027-03-01"
+      }
     }
   ]
 }
