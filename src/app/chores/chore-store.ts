@@ -1,5 +1,5 @@
-import { httpResource } from '@angular/common/http';
-import { Injectable, computed, signal } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { DestroyRef, Injectable, computed, inject, signal } from '@angular/core';
 import { addDays, toIsoDate } from '../shared/dates';
 import { Chore, ChoresFile, ChoreColor } from './chore.model';
 import { Period, isDue, timesDueIn } from './recurrence';
@@ -19,11 +19,15 @@ export class ChoreStore {
   // The timestamp skips the browser cache, so edits to chores.json show up on reload.
   private readonly file = httpResource<ChoresFile>(() => `chores.json?v=${Date.now()}`);
 
+  private readonly http = inject(HttpClient);
+
   /**
-   * How often each chore was ticked off in this browser tab, keyed by
-   * "color:chore name@YYYY-MM-DD" (the day, or the first day of the week or month). Not saved.
+   * How often each chore was ticked off, keyed by "color:chore name@YYYY-MM-DD"
+   * (the day, or the first day of the week or month). Saved by the server in done.json.
    */
   private readonly done = signal(new Map<string, number>());
+  /** True when the last tick could not be saved, e.g. because the server is not running. */
+  readonly saveFailed = signal(false);
 
   readonly colorFilter = signal<ColorFilter>('all');
   readonly isLoading = this.file.isLoading;
@@ -49,6 +53,18 @@ export class ChoreStore {
       .map((c) => c.chore)
       .filter((chore) => filter === 'all' || chore.color === filter);
   });
+
+  constructor() {
+    // Ticks made on other devices show up within half a minute, or when the page is opened again.
+    this.loadDone();
+    const timer = setInterval(() => this.loadDone(), 30_000);
+    const onVisible = () => document.visibilityState === 'visible' && this.loadDone();
+    document.addEventListener('visibilitychange', onVisible);
+    inject(DestroyRef).onDestroy(() => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', onVisible);
+    });
+  }
 
   choresOn(date: Date): Chore[] {
     return this.chores().filter((chore) => isDue(chore.repeat, date));
@@ -82,9 +98,31 @@ export class ChoreStore {
   /** Ticks the chore off once more; after the last of `times` it starts again from zero. */
   tickOff(chore: Chore, start: Date, times = 1): void {
     const key = doneKey(chore, start);
-    this.done.update((done) => new Map(done).set(key, ((done.get(key) ?? 0) + 1) % (times + 1)));
+    const count = (this.doneCount(chore, start) + 1) % (times + 1);
+    // Show the tick at once; the server's answer then brings in other devices' ticks too.
+    this.done.update((done) => new Map(done).set(key, count));
+    this.http.put<DoneFile>('api/done', { key, count }).subscribe({
+      next: (done) => this.setDone(done),
+      error: () => this.saveFailed.set(true),
+    });
+  }
+
+  private loadDone(): void {
+    this.http.get<DoneFile>('api/done').subscribe({
+      next: (done) => this.setDone(done),
+      // Without the server (e.g. plain `ng serve`) ticks still work until the page is reloaded.
+      error: () => {},
+    });
+  }
+
+  private setDone(done: DoneFile): void {
+    this.done.set(new Map(Object.entries(done)));
+    this.saveFailed.set(false);
   }
 }
+
+/** What the server stores in done.json. */
+type DoneFile = Record<string, number>;
 
 function doneKey(chore: Chore, date: Date): string {
   return `${chore.color}:${chore.name}@${toIsoDate(date)}`;

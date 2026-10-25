@@ -55,6 +55,12 @@
   </section>
 }
 
+@if (store.saveFailed()) {
+  <section class="problems" role="alert">
+    Abhaken konnte nicht gespeichert werden. Läuft der Server auf dem Raspberry Pi?
+  </section>
+}
+
 <div class="layout" [class.with-list]="listPanel() === 'open'">
   @if (listPanel() === 'open') {
     <!-- Only visible when the list is a drawer: tapping beside it closes it. -->

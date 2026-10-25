@@ -1,6 +1,6 @@
 # Household chores
 
-A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. The interface is in German. Click a chore on the month calendar to tick it off; ticks are not saved and reset on reload. Chores without a fixed day ("twice a week") show in a strip above each week. The panel button at the top left shows or hides the chore list (a drawer on phones), and the ☾/☀ button switches between light and dark; each device remembers its choice.
+A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. The interface is in German. Click a chore on the month calendar to tick it off; ticks are saved on the Raspberry Pi, so every phone and computer sees the same ones. Chores without a fixed day ("twice a week") show in a strip above each week. The panel button at the top left shows or hides the chore list (a drawer on phones), and the ☾/☀ button switches between light and dark; each device remembers its choice.
 
 All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
 
@@ -60,6 +60,7 @@ Needs Node.js 22.22.3+ or 24.15+.
 npm install
 npm start          # http://localhost:4200, reloads on changes
 npm test           # recurrence and validation tests
+npm run server     # the tick server on :8080; npm start forwards /api to it
 npm run build      # static files in dist/chores-calendar/browser
 ```
 
@@ -75,21 +76,37 @@ Code layout (`src/app`):
 
 ## Hosting on a Raspberry Pi
 
-The build is plain static files, so any web server works. With nginx:
+`server/server.mjs` is a small Node server with no dependencies. It serves the built app and saves the ticks to `server/data/done.json`, so they survive reloads and are shared by every device. Ticks from other devices show up within 30 seconds.
 
-1. On the Pi: `sudo apt update && sudo apt install nginx`
-2. On your computer: `npm run build`
-3. Copy the files to the Pi (replace `pi@raspberrypi.local` with your user and Pi's name or IP):
+1. On the Pi, install Node.js 20 or newer: `sudo apt update && sudo apt install nodejs`. Check it with `node -v`.
+2. On your computer, run `npm run build`.
+3. Copy `dist/` and `server/` to `/opt/chores-calendar` on the Pi. Replace `pi@raspberrypi.local` with your user and the Pi's name or IP:
 
    ```bash
-   scp -r dist/chores-calendar/browser/* pi@raspberrypi.local:/tmp/chores/
-   ssh pi@raspberrypi.local "sudo cp -r /tmp/chores/* /var/www/html/"
+   ssh pi@raspberrypi.local "sudo mkdir -p /opt/chores-calendar && sudo chown pi /opt/chores-calendar"
+   scp -r dist server pi@raspberrypi.local:/opt/chores-calendar/
    ```
 
-   On Windows, `scp` and `ssh` work in PowerShell. Create `/tmp/chores` on the Pi first with `ssh pi@raspberrypi.local "mkdir -p /tmp/chores"`.
+   On Windows, `scp` and `ssh` work in PowerShell.
 
-4. Open `http://raspberrypi.local/` (or the Pi's IP) from any device on your network.
+4. Install and start the service. It starts again by itself after a reboot:
 
-To change chores later, edit `/var/www/html/chores.json` on the Pi (`sudo nano /var/www/html/chores.json`) and reload the page. When you rebuild, copy your edited `chores.json` back into `public/` first, or it is overwritten by the copy in the build.
+   ```bash
+   ssh pi@raspberrypi.local
+   sudo cp /opt/chores-calendar/server/chores-calendar.service /etc/systemd/system/
+   sudo systemctl enable --now chores-calendar
+   ```
 
-The app works from a subfolder too (e.g. `/var/www/html/chores/` served at `http://raspberrypi.local/chores/`).
+   If your Pi user is not `pi`, change `User=` in the service file first. The service uses port 80, so stop nginx if it is still running: `sudo systemctl disable --now nginx`.
+
+5. Open `http://raspberrypi.local/` (or the Pi's IP) from any device on your network.
+
+After an update, copy the files again and run `sudo systemctl restart chores-calendar`. Copying `server/` never touches the saved ticks in `server/data/`, because that folder only exists on the Pi.
+
+To change chores later, edit `/opt/chores-calendar/dist/chores-calendar/browser/chores.json` on the Pi and reload the page. When you rebuild, copy your edited `chores.json` back into `public/` first, or it is overwritten by the copy in the build.
+
+Logs: `journalctl -u chores-calendar`. The server reads `PORT`, `STATIC_DIR` and `DATA_FILE` from the environment if you want other places.
+
+### Saved ticks
+
+`done.json` maps `"color:chore name@date"` to how often the chore was ticked off for that day, or for the week or month starting on that date. A chore renamed in `chores.json` starts with no ticks. This file is also the history for counting finished chores later.

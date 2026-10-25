@@ -6,6 +6,9 @@
 /out-tsc
 /bazel-out
 
+# Ticks saved by the server
+/server/data
+
 # Node
 /node_modules
 npm-debug.log
