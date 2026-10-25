@@ -17,6 +17,17 @@ export const CALENDAR_WEEKDAYS: readonly Weekday[] = [
   'sun',
 ];
 
+/** Short weekday names shown on screen. */
+export const WEEKDAY_LABELS: Record<Weekday, string> = {
+  mon: 'Mo',
+  tue: 'Di',
+  wed: 'Mi',
+  thu: 'Do',
+  fri: 'Fr',
+  sat: 'Sa',
+  sun: 'So',
+};
+
 const MS_PER_DAY = 86_400_000;
 const ISO_DATE = /^(\d{4})-(\d{2})-(\d{2})$/;
 

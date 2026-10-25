@@ -8,6 +8,9 @@ export interface ChoresFile {
 export const CHORE_COLORS = ['blue', 'red'] as const;
 export type ChoreColor = (typeof CHORE_COLORS)[number];
 
+/** How the colors are named on screen. */
+export const COLOR_LABELS: Record<ChoreColor, string> = { blue: 'Blau', red: 'Rot' };
+
 export interface Chore {
   name: string;
   color: ChoreColor;

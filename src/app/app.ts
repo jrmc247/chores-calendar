@@ -1,8 +1,8 @@
-import { TitleCasePipe, formatDate } from '@angular/common';
+import { formatDate } from '@angular/common';
 import { Component, LOCALE_ID, computed, effect, inject, signal } from '@angular/core';
 import { ChoreList } from './chore-list/chore-list';
 import { ChoreStore, ColorFilter } from './chores/chore-store';
-import { CHORE_COLORS } from './chores/chore.model';
+import { CHORE_COLORS, COLOR_LABELS } from './chores/chore.model';
 import { DayView } from './day-view/day-view';
 import { MonthView } from './month-view/month-view';
 import { Clock } from './shared/clock';
@@ -12,6 +12,13 @@ import { WeekView } from './week-view/week-view';
 import { YearView } from './year-view/year-view';
 
 type CalendarView = 'day' | 'week' | 'month' | 'year';
+
+const VIEW_LABELS: Record<CalendarView, string> = {
+  day: 'Tag',
+  week: 'Woche',
+  month: 'Monat',
+  year: 'Jahr',
+};
 
 const PANEL_STATES = ['open', 'closed'] as const;
 type PanelState = (typeof PANEL_STATES)[number];
@@ -27,7 +34,7 @@ const prefersDark = () => window.matchMedia('(prefers-color-scheme: dark)').matc
 
 @Component({
   selector: 'app-root',
-  imports: [TitleCasePipe, ChoreList, DayView, WeekView, MonthView, YearView],
+  imports: [ChoreList, DayView, WeekView, MonthView, YearView],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })
@@ -37,6 +44,8 @@ export class App {
   private readonly locale = inject(LOCALE_ID);
 
   protected readonly colors = CHORE_COLORS;
+  protected readonly colorLabels = COLOR_LABELS;
+  protected readonly viewLabels = VIEW_LABELS;
   protected readonly views: CalendarView[] = ['day', 'week', 'month', 'year'];
   /** The chore list panel. Remembered on wide screens; a drawer on narrow ones always starts closed. */
   protected readonly listPanel = storedSignal<PanelState>('chores.list', 'open', PANEL_STATES);
@@ -60,10 +69,10 @@ export class App {
     const date = this.date();
     switch (this.view()) {
       case 'day':
-        return format(date, 'EEEE d MMMM y');
+        return format(date, 'EEEE, d. MMMM y');
       case 'week': {
         const monday = startOfWeek(date);
-        return `${format(monday, 'd MMM')} – ${format(addDays(monday, 6), 'd MMM y')}`;
+        return `${format(monday, 'd. MMM')} – ${format(addDays(monday, 6), 'd. MMM y')}`;
       }
       case 'month':
         return format(date, 'MMMM y');

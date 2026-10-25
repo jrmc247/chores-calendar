@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, computed, inject, input, output } from '@angular/core';
 import { ChoreStore } from '../chores/chore-store';
 import { Clock } from '../shared/clock';
-import { CALENDAR_WEEKDAYS, isSameDay, monthGrid } from '../shared/dates';
+import { CALENDAR_WEEKDAYS, WEEKDAY_LABELS, isSameDay, monthGrid } from '../shared/dates';
 
 /** Twelve small months. Each chore shows as a colored dot; click a month to open it. */
 @Component({
@@ -18,7 +18,7 @@ export class YearView {
   private readonly store = inject(ChoreStore);
   private readonly clock = inject(Clock);
 
-  protected readonly weekdays = CALENDAR_WEEKDAYS;
+  protected readonly weekdays = CALENDAR_WEEKDAYS.map((day) => WEEKDAY_LABELS[day]);
 
   protected readonly months = computed(() => {
     const today = this.clock.today();

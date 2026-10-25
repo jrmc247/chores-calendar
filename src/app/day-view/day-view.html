@@ -12,13 +12,17 @@
       </button>
     </li>
   } @empty {
-    <li class="empty">Nothing due on this day.</li>
+    <li class="empty">An diesem Tag ist nichts fällig.</li>
   }
 </ul>
 
 @if (weekChores().length) {
-  <app-anytime-strip label="Anytime this week" [start]="weekStart()" [items]="weekChores()" />
+  <app-anytime-strip label="Irgendwann diese Woche" [start]="weekStart()" [items]="weekChores()" />
 }
 @if (monthChores().length) {
-  <app-anytime-strip label="Anytime this month" [start]="monthStart()" [items]="monthChores()" />
+  <app-anytime-strip
+    label="Irgendwann diesen Monat"
+    [start]="monthStart()"
+    [items]="monthChores()"
+  />
 }

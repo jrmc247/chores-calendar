@@ -143,20 +143,20 @@ describe('timesDueIn', () => {
 
 describe('describeRepeat', () => {
   it.each<[Repeat, string]>([
-    [{ type: 'weekly', days: ['mon'] }, 'Every Monday'],
-    [{ type: 'weekly', days: ['mon', 'tue', 'wed'] }, 'Every Mon, Tue and Wed'],
-    [{ type: 'weekly', days: ['mon'], every: 2, start: '2026-10-05' }, 'Every 2 weeks on Monday'],
-    [{ type: 'daily' }, 'Every day'],
-    [{ type: 'daily', every: 3, start: '2026-10-01' }, 'Every 3 days'],
-    [{ type: 'monthly', days: ['last'] }, 'Monthly on the last day'],
-    [{ type: 'monthly', days: [1, 15] }, 'Monthly on the 1st and 15th'],
-    [{ type: 'monthly', weekday: 'sat', nth: 1 }, 'Monthly on the first Saturday'],
-    [{ type: 'once', dates: ['2026-11-14'] }, 'On 14 Nov 2026'],
-    [{ type: 'yearly', dates: ['03-01'] }, 'Every year on 1 Mar'],
-    [{ type: 'weekly', times: 1 }, 'Once a week'],
-    [{ type: 'weekly', times: 2 }, 'Twice a week'],
-    [{ type: 'weekly', times: 1, every: 2, start: '2026-10-05' }, 'Once every 2 weeks'],
-    [{ type: 'monthly', times: 3 }, '3 times a month'],
+    [{ type: 'weekly', days: ['mon'] }, 'Jeden Montag'],
+    [{ type: 'weekly', days: ['mon', 'tue', 'wed'] }, 'Jeden Mo, Di und Mi'],
+    [{ type: 'weekly', days: ['mon'], every: 2, start: '2026-10-05' }, 'Alle 2 Wochen am Montag'],
+    [{ type: 'daily' }, 'Täglich'],
+    [{ type: 'daily', every: 3, start: '2026-10-01' }, 'Alle 3 Tage'],
+    [{ type: 'monthly', days: ['last'] }, 'Monatlich am letzten Tag'],
+    [{ type: 'monthly', days: [1, 15] }, 'Monatlich am 1. und 15.'],
+    [{ type: 'monthly', weekday: 'sat', nth: 1 }, 'Monatlich am ersten Samstag'],
+    [{ type: 'once', dates: ['2026-11-14'] }, 'Am 14. Nov. 2026'],
+    [{ type: 'yearly', dates: ['03-01'] }, 'Jährlich am 1. März'],
+    [{ type: 'weekly', times: 1 }, 'Einmal pro Woche'],
+    [{ type: 'weekly', times: 2 }, 'Zweimal pro Woche'],
+    [{ type: 'weekly', times: 1, every: 2, start: '2026-10-05' }, 'Einmal alle 2 Wochen'],
+    [{ type: 'monthly', times: 3 }, '3-mal pro Monat'],
   ])('describes %j as "%s"', (rule, text) => {
     expect(describeRepeat(rule)).toBe(text);
   });

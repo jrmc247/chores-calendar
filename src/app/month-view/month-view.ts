@@ -2,7 +2,13 @@ import { Component, computed, inject, input, output } from '@angular/core';
 import { AnytimeStrip } from '../anytime-strip/anytime-strip';
 import { ChoreStore } from '../chores/chore-store';
 import { Clock } from '../shared/clock';
-import { CALENDAR_WEEKDAYS, isSameDay, monthGrid, startOfMonth } from '../shared/dates';
+import {
+  CALENDAR_WEEKDAYS,
+  WEEKDAY_LABELS,
+  isSameDay,
+  monthGrid,
+  startOfMonth,
+} from '../shared/dates';
 
 /**
  * One month as a grid of days. Click a chore to tick it off, or a day number to open that day.
@@ -22,7 +28,7 @@ export class MonthView {
   protected readonly store = inject(ChoreStore);
   private readonly clock = inject(Clock);
 
-  protected readonly weekdays = CALENDAR_WEEKDAYS;
+  protected readonly weekdays = CALENDAR_WEEKDAYS.map((day) => WEEKDAY_LABELS[day]);
 
   protected readonly monthStart = computed(() => startOfMonth(this.month()));
 

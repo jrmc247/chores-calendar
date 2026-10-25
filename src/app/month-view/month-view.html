@@ -2,7 +2,7 @@
   @if (monthChores().length) {
     <app-anytime-strip
       class="strip"
-      label="Anytime this month"
+      label="Irgendwann diesen Monat"
       [start]="monthStart()"
       [items]="monthChores()"
     />
@@ -16,7 +16,7 @@
     @if (week.anytimeChores.length) {
       <app-anytime-strip
         class="strip"
-        label="Anytime this week"
+        label="Irgendwann diese Woche"
         [start]="week.start"
         [items]="week.anytimeChores"
       />

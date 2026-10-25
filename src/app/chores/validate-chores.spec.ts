@@ -16,7 +16,7 @@ describe('validateChore', () => {
 
   it('names the chore and the problem', () => {
     expect(validateChore(chore({ color: 'green' }), 2)).toEqual([
-      'Chore 3 "Trash": "color" must be blue or red',
+      'Aufgabe 3 "Trash": "color" muss blue oder red sein',
     ]);
   });
 
@@ -32,7 +32,7 @@ describe('validateChore', () => {
   it('requires a start date for intervals', () => {
     expect(
       validateChore(chore({ repeat: { type: 'weekly', days: ['mon'], every: 2 } }), 0),
-    ).toEqual(['Chore 1 "Trash": "every": 2 needs a "start" date']);
+    ).toEqual(['Aufgabe 1 "Trash": "every": 2 braucht ein "start"-Datum']);
   });
 
   it('accepts anytime chores and rejects mixing times with days', () => {

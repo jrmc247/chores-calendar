@@ -1,7 +1,7 @@
 {
   "chores": [
     {
-      "name": "Take out the trash",
+      "name": "Abfall rausbringen",
       "color": "blue",
       "repeat": {
         "type": "weekly",
@@ -9,7 +9,7 @@
       }
     },
     {
-      "name": "Laundry",
+      "name": "Wäsche waschen",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -17,7 +17,7 @@
       }
     },
     {
-      "name": "Wash the dishes",
+      "name": "Abwaschen",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -25,7 +25,7 @@
       }
     },
     {
-      "name": "Wash the dishes",
+      "name": "Abwaschen",
       "color": "blue",
       "repeat": {
         "type": "weekly",
@@ -33,7 +33,7 @@
       }
     },
     {
-      "name": "Paper recycling",
+      "name": "Altpapier",
       "color": "red",
       "repeat": {
         "type": "weekly",
@@ -43,7 +43,7 @@
       }
     },
     {
-      "name": "Water the plants",
+      "name": "Pflanzen gießen",
       "color": "blue",
       "repeat": {
         "type": "daily",
@@ -52,7 +52,7 @@
       }
     },
     {
-      "name": "Pay the rent",
+      "name": "Miete zahlen",
       "color": "red",
       "repeat": {
         "type": "monthly",
@@ -60,7 +60,7 @@
       }
     },
     {
-      "name": "Clean the fridge",
+      "name": "Kühlschrank putzen",
       "color": "blue",
       "repeat": {
         "type": "monthly",
@@ -69,7 +69,7 @@
       }
     },
     {
-      "name": "Descale the coffee machine",
+      "name": "Kaffeemaschine entkalken",
       "color": "red",
       "repeat": {
         "type": "monthly",
@@ -79,7 +79,7 @@
       }
     },
     {
-      "name": "Change the smoke detector battery",
+      "name": "Rauchmelder-Batterie wechseln",
       "color": "blue",
       "repeat": {
         "type": "yearly",
@@ -87,7 +87,7 @@
       }
     },
     {
-      "name": "Plumber visit",
+      "name": "Termin Klempner",
       "color": "red",
       "repeat": {
         "type": "once",
@@ -95,7 +95,7 @@
       }
     },
     {
-      "name": "Clean the windows",
+      "name": "Fenster putzen",
       "color": "blue",
       "repeat": {
         "type": "monthly",

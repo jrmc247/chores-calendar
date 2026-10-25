@@ -1,4 +1,5 @@
 import {
+  WEEKDAY_LABELS,
   Weekday,
   addDays,
   addMonths,
@@ -87,97 +88,89 @@ function matchesMonthDay(rule: MonthlyRule, date: Date): boolean {
   return false;
 }
 
-// ---- Human readable descriptions, shown in the chore list ----
+// ---- Human readable descriptions (German), shown in the chore list ----
 
 const WEEKDAY_NAMES: Record<Weekday, string> = {
-  mon: 'Monday',
-  tue: 'Tuesday',
-  wed: 'Wednesday',
-  thu: 'Thursday',
-  fri: 'Friday',
-  sat: 'Saturday',
-  sun: 'Sunday',
+  mon: 'Montag',
+  tue: 'Dienstag',
+  wed: 'Mittwoch',
+  thu: 'Donnerstag',
+  fri: 'Freitag',
+  sat: 'Samstag',
+  sun: 'Sonntag',
 };
 
-/** e.g. "Every Monday", "Every 2 weeks on Mon and Wed", "Monthly on the last day", "Twice a week". */
+/** e.g. "Jeden Montag", "Alle 2 Wochen am Mo und Mi", "Monatlich am letzten Tag", "Zweimal pro Woche". */
 export function describeRepeat(rule: Repeat): string {
   if (isAnytime(rule)) return withEnd(rule, describeAnytime(rule));
   switch (rule.type) {
     case 'once':
-      return `On ${listOf(rule.dates.map((d) => formatIsoDate(d)))}`;
+      return `Am ${listOf(rule.dates.map((d) => formatIsoDate(d)))}`;
     case 'yearly':
-      return `Every year on ${listOf(rule.dates.map((d) => formatIsoDate(`2000-${d}`, false)))}`;
+      return `Jährlich am ${listOf(rule.dates.map((d) => formatIsoDate(`2000-${d}`, false)))}`;
     case 'daily':
-      return withEnd(rule, every(rule, 'day', 'days'));
+      return withEnd(rule, isEveryTime(rule) ? 'Täglich' : `Alle ${rule.every} Tage`);
     case 'weekly': {
       const days = describeWeekdays(rule.days!);
       return withEnd(
         rule,
-        isEveryTime(rule) ? `Every ${days}` : `${every(rule, '', 'weeks')} on ${days}`,
+        isEveryTime(rule) ? `Jeden ${days}` : `Alle ${rule.every} Wochen am ${days}`,
       );
     }
     case 'monthly': {
       const days = describeMonthDays(rule);
       return withEnd(
         rule,
-        isEveryTime(rule) ? `Monthly on ${days}` : `${every(rule, '', 'months')} on ${days}`,
+        isEveryTime(rule) ? `Monatlich am ${days}` : `Alle ${rule.every} Monate am ${days}`,
       );
     }
   }
 }
 
-/** e.g. "Twice a week", "Once every 2 weeks", "3 times a month". */
+/** e.g. "Zweimal pro Woche", "Einmal alle 2 Wochen", "3-mal pro Monat". */
 function describeAnytime(rule: AnytimeRule): string {
-  const times = ['Once', 'Twice'][rule.times - 1] ?? `${rule.times} times`;
-  const unit = rule.type === 'weekly' ? 'week' : 'month';
-  return isEveryTime(rule) ? `${times} a ${unit}` : `${times} every ${rule.every} ${unit}s`;
+  const times = ['Einmal', 'Zweimal'][rule.times - 1] ?? `${rule.times}-mal`;
+  if (!isEveryTime(rule)) {
+    return `${times} alle ${rule.every} ${rule.type === 'weekly' ? 'Wochen' : 'Monate'}`;
+  }
+  return `${times} pro ${rule.type === 'weekly' ? 'Woche' : 'Monat'}`;
 }
 
 function isEveryTime(rule: RepeatingRule): boolean {
   return (rule.every ?? 1) === 1;
 }
 
-function every(rule: RepeatingRule, one: string, many: string): string {
-  return isEveryTime(rule) ? `Every ${one}` : `Every ${rule.every} ${many}`;
-}
-
 function withEnd(rule: RepeatingRule, text: string): string {
-  return rule.end ? `${text}, until ${formatIsoDate(rule.end)}` : text;
+  return rule.end ? `${text}, bis ${formatIsoDate(rule.end)}` : text;
 }
 
 function describeWeekdays(days: Weekday[]): string {
-  return days.length === 1
-    ? WEEKDAY_NAMES[days[0]]
-    : listOf(days.map((d) => d.slice(0, 1).toUpperCase() + d.slice(1)));
+  return days.length === 1 ? WEEKDAY_NAMES[days[0]] : listOf(days.map((d) => WEEKDAY_LABELS[d]));
 }
 
 function describeMonthDays(rule: MonthlyRule): string {
-  if (rule.days) return `the ${listOf(rule.days.map(ordinalDay))}`;
-  return `the ${ordinalWeek(rule.nth!)} ${WEEKDAY_NAMES[rule.weekday!]}`;
+  if (rule.days) return listOf(rule.days.map(ordinalDay));
+  return `${ordinalWeek(rule.nth!)} ${WEEKDAY_NAMES[rule.weekday!]}`;
 }
 
 function ordinalDay(day: DayOfMonth): string {
-  return day === 'last' ? 'last day' : ordinal(day);
+  return day === 'last' ? 'letzten Tag' : `${day}.`;
 }
 
 function ordinalWeek(nth: NthWeek): string {
-  return nth === 'last' ? 'last' : ['first', 'second', 'third', 'fourth', 'fifth'][nth - 1];
-}
-
-function ordinal(n: number): string {
-  const suffix =
-    n % 100 >= 11 && n % 100 <= 13 ? 'th' : ({ 1: 'st', 2: 'nd', 3: 'rd' }[n % 10] ?? 'th');
-  return `${n}${suffix}`;
+  return nth === 'last'
+    ? 'letzten'
+    : ['ersten', 'zweiten', 'dritten', 'vierten', 'fünften'][nth - 1];
 }
 
 function listOf(items: string[]): string {
-  return items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
+  return items.length < 2 ? items.join('') : `${items.slice(0, -1).join(', ')} und ${items.at(-1)}`;
 }
 
 function formatIsoDate(iso: string, withYear = true): string {
   const date = parseIsoDate(iso);
   if (!date) return iso;
-  return date.toLocaleDateString('en-GB', {
+  return date.toLocaleDateString('de-DE', {
     day: 'numeric',
     month: 'short',
     year: withYear ? 'numeric' : undefined,

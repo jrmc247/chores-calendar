@@ -5,8 +5,10 @@
       class="panel-toggle"
       aria-controls="chore-list"
       [attr.aria-expanded]="listPanel() === 'open'"
-      [attr.aria-label]="listPanel() === 'open' ? 'Hide chore list' : 'Show chore list'"
-      [title]="listPanel() === 'open' ? 'Hide chore list' : 'Show chore list'"
+      [attr.aria-label]="
+        listPanel() === 'open' ? 'Aufgabenliste ausblenden' : 'Aufgabenliste einblenden'
+      "
+      [title]="listPanel() === 'open' ? 'Aufgabenliste ausblenden' : 'Aufgabenliste einblenden'"
       (click)="toggleList()"
     >
       <!-- A window with a side panel -->
@@ -15,11 +17,11 @@
         <line x1="9" y1="4" x2="9" y2="20" />
       </svg>
     </button>
-    <h1>Household chores</h1>
+    <h1>Haushaltsaufgaben</h1>
   </div>
 
   <div class="actions">
-    <nav class="colors" aria-label="Show only">
+    <nav class="colors" aria-label="Nur anzeigen">
       @for (color of colors; track color) {
         <button
           type="button"
@@ -27,14 +29,14 @@
           [attr.aria-pressed]="store.colorFilter() === color"
           (click)="toggleFilter(color)"
         >
-          {{ color | titlecase }}
+          {{ colorLabels[color] }}
         </button>
       }
     </nav>
     <button
       type="button"
       class="theme"
-      [attr.aria-label]="theme() === 'light' ? 'Switch to dark' : 'Switch to light'"
+      [attr.aria-label]="theme() === 'light' ? 'Dunkles Design' : 'Helles Design'"
       (click)="toggleTheme()"
     >
       {{ theme() === 'light' ? '☾' : '☀' }}
@@ -44,7 +46,7 @@
 
 @if (store.problems().length) {
   <section class="problems" role="alert">
-    <strong>Please check chores.json</strong>
+    <strong>Bitte chores.json prüfen</strong>
     <ul>
       @for (problem of store.problems(); track problem) {
         <li>{{ problem }}</li>
@@ -63,17 +65,17 @@
   <main>
     <div class="toolbar">
       <div class="navigation">
-        <button type="button" (click)="step(-1)" aria-label="Previous">‹</button>
-        <button type="button" (click)="goToToday()">Today</button>
-        <button type="button" (click)="step(1)" aria-label="Next">›</button>
+        <button type="button" (click)="step(-1)" aria-label="Zurück">‹</button>
+        <button type="button" (click)="goToToday()">Heute</button>
+        <button type="button" (click)="step(1)" aria-label="Weiter">›</button>
       </div>
 
       <h2>{{ heading() }}</h2>
 
-      <div class="view-switch" role="group" aria-label="View">
+      <div class="view-switch" role="group" aria-label="Ansicht">
         @for (option of views; track option) {
           <button type="button" [attr.aria-pressed]="view() === option" (click)="view.set(option)">
-            {{ option | titlecase }}
+            {{ viewLabels[option] }}
           </button>
         }
       </div>

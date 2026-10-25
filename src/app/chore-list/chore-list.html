@@ -1,20 +1,20 @@
 <aside>
   @for (group of groups(); track group.color) {
     <section [class]="group.color">
-      <h3>{{ group.color | titlecase }}</h3>
+      <h3>{{ group.label }}</h3>
       <ul>
         @for (chore of group.chores; track chore.name) {
           <li>
             <span class="name">{{ chore.name }}</span>
             <span class="schedule">{{ chore.schedule }}</span>
             @if (chore.nextDue; as nextDue) {
-              <span class="next">Next: {{ nextDue | date: 'EEE d MMM' }}</span>
+              <span class="next">Nächstes Mal: {{ nextDue | date: 'EEE, d. MMM' }}</span>
             }
           </li>
         }
       </ul>
     </section>
   } @empty {
-    <p class="empty">No chores yet. Add some to chores.json.</p>
+    <p class="empty">Noch keine Aufgaben. Trage welche in chores.json ein.</p>
   }
 </aside>

@@ -37,7 +37,7 @@ export class ChoreStore {
 
   readonly problems = computed(() => {
     const error = this.file.error();
-    if (error) return [`Could not load chores.json: ${error.message}`];
+    if (error) return [`chores.json konnte nicht geladen werden: ${error.message}`];
     return this.checkedChores().flatMap((c) => c.problems);
   });
 
