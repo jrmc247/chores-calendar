@@ -1,0 +1,46 @@
+# Tests and builds every push to main, then publishes the result to the `deploy`
+# branch. The Raspberry Pi checks that branch every 2 minutes (deploy/pi/update.sh).
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - run: npx ng test --watch=false
+      - run: npm run build
+
+      - name: Publish to the deploy branch
+        run: |
+          mkdir -p out/dist/chores-calendar out/deploy
+          cp -r dist/chores-calendar/browser out/dist/chores-calendar/
+          cp -r server out/
+          cp -r deploy/pi out/deploy/
+          echo "server/data/" > out/.gitignore
+
+          cd out
+          git init --quiet --initial-branch deploy
+          git add --all
+          git -c user.name="github-actions[bot]" \
+              -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --quiet --message "Deploy ${GITHUB_SHA::7}: $(git -C .. log -1 --format=%s)"
+          git push --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" deploy

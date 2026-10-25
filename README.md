@@ -2,7 +2,7 @@
 
 A small Angular app that shows the household chores on a calendar. The chores are listed on the left, grouped by color, and appear on their due days in the day, week, month or year view. Phones open on the day view; click a day in the week or month view to open it. Each chore is blue or red, and you decide between you who is which color. The interface is in German. Click a chore on the month calendar to tick it off; ticks are saved on the Raspberry Pi, so every phone and computer sees the same ones. Chores without a fixed day ("twice a week") show in a strip above each week. The panel button at the top left shows or hides the chore list (a drawer on phones), and the ☾/☀ button switches between light and dark; each device remembers its choice.
 
-All chores live in one file, `public/chores.json`. The app reads it when the page loads, so after building you can edit it straight on the Raspberry Pi without rebuilding.
+All chores live in one file, `public/chores.json`. Push a change to it and the Raspberry Pi picks it up within a few minutes (see [Hosting on a Raspberry Pi](#hosting-on-a-raspberry-pi)).
 
 ## Editing chores
 
@@ -78,34 +78,32 @@ Code layout (`src/app`):
 
 `server/server.mjs` is a small Node server with no dependencies. It serves the built app and saves the ticks to `server/data/done.json`, so they survive reloads and are shared by every device. Ticks from other devices show up within 30 seconds.
 
-1. On the Pi, install Node.js 20 or newer: `sudo apt update && sudo apt install nodejs`. Check it with `node -v`.
-2. On your computer, run `npm run build`.
-3. Copy `dist/` and `server/` to `/opt/chores-calendar` on the Pi. Replace `pi@raspberrypi.local` with your user and the Pi's name or IP:
+The Pi updates itself. Every push to `main` runs the tests and the build on GitHub (`.github/workflows/deploy.yml`) and puts the result on the `deploy` branch. The Pi checks that branch every 2 minutes, and when there is a new build it takes it and restarts the server. So a change pushed to GitHub is live on the Pi about 5 minutes later, and nothing has to be copied by hand.
 
-   ```bash
-   ssh pi@raspberrypi.local "sudo mkdir -p /opt/chores-calendar && sudo chown pi /opt/chores-calendar"
-   scp -r dist server pi@raspberrypi.local:/opt/chores-calendar/
-   ```
+### One-time setup
 
-   On Windows, `scp` and `ssh` work in PowerShell.
+On the Pi (with a keyboard and screen, or over `ssh pi@raspberrypi.local` from your computer), run:
 
-4. Install and start the service. It starts again by itself after a reboot:
+```bash
+curl -fsSL https://raw.githubusercontent.com/jrmc247/chores-calendar/main/deploy/pi/setup.sh | sudo bash
+```
 
-   ```bash
-   ssh pi@raspberrypi.local
-   sudo cp /opt/chores-calendar/server/chores-calendar.service /etc/systemd/system/
-   sudo systemctl enable --now chores-calendar
-   ```
+It installs git and Node.js 20+, downloads the app to `/opt/chores-calendar`, turns off nginx (the app's own server uses port 80), starts the update timer and starts the app. Then open `http://raspberrypi.local/` (or the Pi's IP) from any device on your network.
 
-   If your Pi user is not `pi`, change `User=` in the service file first. The service uses port 80, so stop nginx if it is still running: `sudo systemctl disable --now nginx`.
+The server runs as the user `pi`, which is created if your Pi does not have it. Running the setup again is safe.
 
-5. Open `http://raspberrypi.local/` (or the Pi's IP) from any device on your network.
+### Day to day
 
-After an update, copy the files again and run `sudo systemctl restart chores-calendar`. Copying `server/` never touches the saved ticks in `server/data/`, because that folder only exists on the Pi.
+- See what the Pi deployed: `journalctl -u chores-deploy`. Each update logs `Deployed: Deploy abc1234: <commit message>`.
+- Update right now instead of waiting: `sudo /opt/chores-calendar/deploy/pi/update.sh --force`.
+- Server logs: `journalctl -u chores-calendar`.
+- If a push breaks the tests or the build, the run fails on GitHub (the Actions tab) and the Pi keeps the last working version.
 
-To change chores later, edit `/opt/chores-calendar/dist/chores-calendar/browser/chores.json` on the Pi and reload the page. When you rebuild, copy your edited `chores.json` back into `public/` first, or it is overwritten by the copy in the build.
+The saved ticks in `server/data/` are never touched by an update.
 
-Logs: `journalctl -u chores-calendar`. The server reads `PORT`, `STATIC_DIR` and `DATA_FILE` from the environment if you want other places.
+Change chores in `public/chores.json` in the repo, so they go through GitHub like everything else. If you edit `/opt/chores-calendar/dist/chores-calendar/browser/chores.json` on the Pi instead, the Pi keeps your edit and from then on ignores `chores.json` from GitHub (the deploy log says so). To go back to the GitHub version, run `sudo git -C /opt/chores-calendar checkout -- dist/chores-calendar/browser/chores.json`.
+
+The server reads `PORT`, `STATIC_DIR` and `DATA_FILE` from the environment if you want other places.
 
 ### Saved ticks
 
