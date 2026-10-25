@@ -64,6 +64,14 @@ npm run server     # the tick server on :8080; npm start forwards /api to it
 npm run build      # static files in dist/chores-calendar/browser
 ```
 
+### Running with the tick server
+
+Like on the Pi, from a build: run `npm run build`, then `npm run server`, and open http://localhost:8080. Ticks are saved in `server/data/done.json`.
+
+While changing code: run `npm run server` in one terminal and `npm start` in another, then open http://localhost:4200. The dev server reloads on changes and passes `/api` on to the tick server. Without the tick server, ticks still work but are lost on reload, and a red notice says so.
+
+For another port, use `PORT=3000 npm run server`. With `npm start`, also change the target in `proxy.conf.json`.
+
 Code layout (`src/app`):
 
 - `chores/chore.model.ts`: the shape of `chores.json`.
